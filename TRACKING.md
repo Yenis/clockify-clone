@@ -206,3 +206,33 @@ See [PLAN.md](PLAN.md) for the plan itself.
 - Adding the new entry at the top of the list. The list is ordered by start time, so an entry for this morning belongs among this morning's entries, wherever that is.
 
 **Checked:** added an entry between two others: it appeared between them, and the total went up by its duration. Added one for an earlier day: it went to the bottom, and today's total didn't change. Tried an end before the start, and an empty end: refused with a message, nothing added, and the fields kept what I typed. Reopened the app: the entries were still there.
+
+---
+
+## Step 12: Clear messages when the input is wrong
+
+**Date:** 2026-10-15
+
+**What:** the pop-ups from steps 10 and 11 are gone. When a date or time is missing or wrong, the app now shows a red message right where you are working: under the form when adding by hand, and in a line under the row when editing. The field that needs fixing gets a red border and the cursor. As soon as you start typing in the form, the message goes away. Nothing is saved until the input is right.
+
+The messages say exactly what to fix:
+
+| Problem | Message |
+|---|---|
+| No date | Please choose a date. |
+| No start time | Please fill in the start time. |
+| No end time | Please fill in the end time. |
+| A date or time that doesn't exist | This date or time is not a real one. Please check it. |
+| End before or equal to start | The end time must be after the start time. Entries can't go past midnight yet. |
+
+**Why:** a pop-up blocks the page, says the same thing for several different problems, and disappears before you have fixed anything. A message next to the field says which field and what is wrong, and stays until you fix it.
+
+**Decided against:**
+
+- The browser's own built-in checks on the fields. Each browser shows them differently, in its own words, and some don't show them at all.
+- Refusing entries in the future, or entries that overlap. Both can be legitimate, for example planning a meeting, and they were not part of the plan.
+- A pop-up for "your entries could not be saved". That one stays a pop-up on purpose: it is rare, it is serious, and it isn't about one field.
+
+**Checked:** in the form, left each field empty in turn: each time the right message, the right field marked, and the cursor in it. Typing in the form made the message go away. An end before the start: message, nothing added. Then the same while editing: the message appeared under the row and went away when I fixed the time. No pop-ups anywhere.
+
+**Gold is done.**

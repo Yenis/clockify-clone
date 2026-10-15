@@ -24,22 +24,23 @@
       <form id="manual-form" class="manual-form" novalidate>
         <label class="manual-description">
           Description
-          <input name="description" type="text" class="edit-field" autocomplete="off"
+          <input name="description" data-field="description" type="text" class="edit-field" autocomplete="off"
                  placeholder="What did you work on?">
         </label>
         <label>
           Date
-          <input name="date" type="date" class="edit-field">
+          <input name="date" data-field="date" type="date" class="edit-field">
         </label>
         <label>
           Start
-          <input name="start" type="time" class="edit-field">
+          <input name="start" data-field="start" type="time" class="edit-field">
         </label>
         <label>
           End
-          <input name="end" type="time" class="edit-field">
+          <input name="end" data-field="end" type="time" class="edit-field">
         </label>
         <button class="button button-primary" type="submit">Add</button>
+        <p id="manual-error" class="form-error" role="alert" hidden></p>
       </form>
     </details>
 

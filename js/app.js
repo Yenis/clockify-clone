@@ -8,6 +8,7 @@ const entriesTable = document.getElementById('entries-table');
 const entriesBody = document.getElementById('entries-body');
 const todayTotal = document.getElementById('today-total');
 const manualForm = document.getElementById('manual-form');
+const manualError = document.getElementById('manual-error');
 
 // All finished entries: { id, description, start, end }.
 // start and end are stored as ISO text, for example "2026-10-15T07:00:00.000Z".
@@ -205,9 +206,10 @@ function saveEdit(id) {
     ? oldEnd
     : fromDateAndTimeFields(field('date'), field('end'));
 
-  const problem = timesProblem(start, end);
+  const problem = timesProblem(
+    { date: field('date'), start: field('start'), end: field('end') }, start, end);
   if (problem) {
-    alert(problem);
+    showEditProblem(row, problem);
     return;
   }
 
@@ -218,12 +220,71 @@ function saveEdit(id) {
   stopEditing();
 }
 
-// What is wrong with a start and end typed in by hand, or null if nothing is.
-// Used both when editing and when adding an entry by hand.
-function timesProblem(start, end) {
-  if (!start || !end) return 'Please fill in the date, the start time and the end time.';
-  if (end <= start) return 'The end time must be after the start time.';
+// What is wrong with a date, start and end typed in by hand, or null if nothing is.
+// Says which field to fix and how. Used both when editing and when adding by hand.
+// `values` are the texts in the fields; `start` and `end` are the Dates made from them.
+function timesProblem(values, start, end) {
+  if (!values.date) return { field: 'date', message: 'Please choose a date.' };
+  if (!values.start) return { field: 'start', message: 'Please fill in the start time.' };
+  if (!values.end) return { field: 'end', message: 'Please fill in the end time.' };
+  if (!start || !end) return { field: 'date', message: 'This date or time is not a real one. Please check it.' };
+  if (end <= start) {
+    return { field: 'end', message: 'The end time must be after the start time. Entries can\'t go past midnight yet.' };
+  }
   return null;
+}
+
+// Marks the field that needs fixing, and puts the cursor in it.
+function markProblemField(container, problem) {
+  unmarkProblemFields(container);
+  const input = container.querySelector(`[data-field="${problem.field}"]`);
+  input.setAttribute('aria-invalid', 'true');
+  input.focus();
+}
+
+function unmarkProblemFields(container) {
+  for (const input of container.querySelectorAll('[aria-invalid]')) {
+    input.removeAttribute('aria-invalid');
+  }
+}
+
+function showManualProblem(problem) {
+  markProblemField(manualForm, problem);
+  manualError.textContent = problem.message;
+  manualError.hidden = false;
+}
+
+function clearManualProblem() {
+  unmarkProblemFields(manualForm);
+  manualError.textContent = '';
+  manualError.hidden = true;
+}
+
+// While editing, the message goes in a row of its own, right under the row being edited.
+function showEditProblem(row, problem) {
+  markProblemField(row, problem);
+
+  let messageRow = row.nextElementSibling;
+  if (!messageRow || !messageRow.classList.contains('edit-message')) {
+    messageRow = document.createElement('tr');
+    messageRow.className = 'edit-message';
+    const td = document.createElement('td');
+    td.colSpan = row.cells.length;
+    const message = document.createElement('p');
+    message.className = 'form-error';
+    message.setAttribute('role', 'alert');
+    td.append(message);
+    messageRow.append(td);
+    row.after(messageRow);
+  }
+  messageRow.querySelector('.form-error').textContent = problem.message;
+}
+
+function clearEditProblem() {
+  const row = entriesBody.querySelector('tr.editing');
+  if (!row) return;
+  unmarkProblemFields(row);
+  if (row.nextElementSibling?.classList.contains('edit-message')) row.nextElementSibling.remove();
 }
 
 function addManualEntry() {
@@ -231,11 +292,13 @@ function addManualEntry() {
   const start = fromDateAndTimeFields(fields.date.value, fields.start.value);
   const end = fromDateAndTimeFields(fields.date.value, fields.end.value);
 
-  const problem = timesProblem(start, end);
+  const problem = timesProblem(
+    { date: fields.date.value, start: fields.start.value, end: fields.end.value }, start, end);
   if (problem) {
-    alert(problem);
+    showManualProblem(problem);
     return;
   }
+  clearManualProblem();
 
   entries.push({
     id: newId(),
@@ -305,6 +368,10 @@ manualForm.addEventListener('submit', (event) => {
   event.preventDefault();
   addManualEntry();
 });
+
+// A message goes away as soon as you start fixing what it is about.
+manualForm.addEventListener('input', clearManualProblem);
+entriesBody.addEventListener('input', clearEditProblem);
 
 // Remember the description of a running timer while you type it.
 descriptionInput.addEventListener('input', () => {
