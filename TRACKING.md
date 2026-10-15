@@ -84,3 +84,22 @@ See [PLAN.md](PLAN.md) for the plan itself.
 - Building the table rows from text with HTML in it. A description like `<b>hello</b>` would then change the page. Each cell is filled as plain text, so whatever you type is shown exactly as typed.
 
 **Checked:** started and stopped the timer three times, one of them without a description: three rows, newest first, with the right times and durations.
+
+---
+
+## Step 6: Entries are saved
+
+**Date:** 2026-10-15
+
+**What:** added `js/storage.js`, which saves the entries in the browser's own storage every time the timer stops, and loads them when the page opens. Closing the tab, or the whole browser, no longer loses your entries.
+
+**Why:** a time tracker that forgets everything when you close it is not much use. This is the last Silver requirement about the list.
+
+**Decided against:**
+
+- Saving to a file on the laptop. A web page opened from a file isn't allowed to write files, and getting around that would mean installing a server.
+- Trusting the saved data blindly. If what is saved is broken or in an unexpected shape, the app starts with an empty list instead of crashing.
+
+**Found while checking:** in a browser that doesn't allow sites to store data, the first version crashed while loading, and then even the timer stopped working. Now the app keeps working without storage: the timer and the list still work, and it warns you that your entries can't be saved.
+
+**Checked:** added two entries, closed the tab, opened `index.html` again: both entries were still there, newest first.

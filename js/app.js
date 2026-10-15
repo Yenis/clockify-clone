@@ -9,7 +9,7 @@ const entriesBody = document.getElementById('entries-body');
 
 // All finished entries: { id, description, start, end }.
 // start and end are stored as ISO text, for example "2026-10-15T07:00:00.000Z".
-let entries = [];
+let entries = loadEntries();
 
 // When the running timer was started, or null when no timer is running.
 let runningSince = null;
@@ -29,6 +29,7 @@ function stopTimer() {
     start: runningSince.toISOString(),
     end: new Date().toISOString(),
   });
+  saveEntries(entries);
   descriptionInput.value = '';
 
   clearInterval(clockTicker);
@@ -95,3 +96,5 @@ startStopButton.addEventListener('click', () => {
     startTimer();
   }
 });
+
+renderEntries();
