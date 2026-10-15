@@ -49,3 +49,19 @@ See [PLAN.md](PLAN.md) for the plan itself.
 - Putting the styles inside the HTML file. A separate file keeps "what is on the page" apart from "how it looks", which makes the changes in later steps easier to follow.
 
 **Checked:** opened `index.html` in the browser: title, input, clock, Start button and "No entries yet." are all there.
+
+---
+
+## Step 4: The timer counts while it runs
+
+**Date:** 2026-10-15
+
+**What:** added `js/time.js` (formats a duration as h:mm:ss) and `js/app.js` (the Start/Stop button and the clock), and loaded both in `index.html`. Start makes the clock count up and turns the button into a red Stop button. Stop puts the clock back to 0:00:00. Nothing is saved yet.
+
+**Why:** the timer is the heart of the app. We make it work on its own before connecting it to the list of entries.
+
+**Decided against:**
+
+- Adding one second to the clock on every tick. Browsers sometimes run timers late, for example in a background tab, so the clock would drift. Instead, every tick works out the time again from the moment you pressed Start.
+
+**Checked:** clicked Start, watched the clock count, clicked Stop: back to 0:00:00 and the button says Start again.

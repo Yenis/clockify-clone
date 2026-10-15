@@ -90,6 +90,12 @@ body {
   background: var(--primary-dark);
 }
 
+.button-stop,
+.button-stop:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+}
+
 /* The list of entries */
 
 .entries {
