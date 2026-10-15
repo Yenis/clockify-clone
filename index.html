@@ -19,6 +19,30 @@
       <button id="start-stop" class="button button-primary" type="button">Start</button>
     </section>
 
+    <details class="manual-entry">
+      <summary>Add an entry by hand</summary>
+      <form id="manual-form" class="manual-form" novalidate>
+        <label class="manual-description">
+          Description
+          <input name="description" type="text" class="edit-field" autocomplete="off"
+                 placeholder="What did you work on?">
+        </label>
+        <label>
+          Date
+          <input name="date" type="date" class="edit-field">
+        </label>
+        <label>
+          Start
+          <input name="start" type="time" class="edit-field">
+        </label>
+        <label>
+          End
+          <input name="end" type="time" class="edit-field">
+        </label>
+        <button class="button button-primary" type="submit">Add</button>
+      </form>
+    </details>
+
     <section class="entries" aria-label="Entries">
       <div class="entries-header">
         <h2>Entries</h2>

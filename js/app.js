@@ -7,6 +7,7 @@ const emptyMessage = document.getElementById('empty-message');
 const entriesTable = document.getElementById('entries-table');
 const entriesBody = document.getElementById('entries-body');
 const todayTotal = document.getElementById('today-total');
+const manualForm = document.getElementById('manual-form');
 
 // All finished entries: { id, description, start, end }.
 // start and end are stored as ISO text, for example "2026-10-15T07:00:00.000Z".
@@ -204,12 +205,9 @@ function saveEdit(id) {
     ? oldEnd
     : fromDateAndTimeFields(field('date'), field('end'));
 
-  if (!start || !end) {
-    alert('Please fill in the date, the start time and the end time.');
-    return;
-  }
-  if (end <= start) {
-    alert('The end time must be after the start time.');
+  const problem = timesProblem(start, end);
+  if (problem) {
+    alert(problem);
     return;
   }
 
@@ -218,6 +216,41 @@ function saveEdit(id) {
   entry.end = end.toISOString();
   saveEntries(entries);
   stopEditing();
+}
+
+// What is wrong with a start and end typed in by hand, or null if nothing is.
+// Used both when editing and when adding an entry by hand.
+function timesProblem(start, end) {
+  if (!start || !end) return 'Please fill in the date, the start time and the end time.';
+  if (end <= start) return 'The end time must be after the start time.';
+  return null;
+}
+
+function addManualEntry() {
+  const fields = manualForm.elements;
+  const start = fromDateAndTimeFields(fields.date.value, fields.start.value);
+  const end = fromDateAndTimeFields(fields.date.value, fields.end.value);
+
+  const problem = timesProblem(start, end);
+  if (problem) {
+    alert(problem);
+    return;
+  }
+
+  entries.push({
+    id: newId(),
+    description: fields.description.value.trim(),
+    start: start.toISOString(),
+    end: end.toISOString(),
+  });
+  saveEntries(entries);
+  renderEntries();
+
+  // Ready for the next one: the date stays, the rest is cleared.
+  fields.description.value = '';
+  fields.start.value = '';
+  fields.end.value = '';
+  fields.description.focus();
 }
 
 function deleteEntry(id) {
@@ -268,12 +301,18 @@ entriesBody.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') stopEditing();
 });
 
+manualForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  addManualEntry();
+});
+
 // Remember the description of a running timer while you type it.
 descriptionInput.addEventListener('input', () => {
   if (runningSince) saveRunningTimer();
 });
 
 renderEntries();
+manualForm.elements.date.value = toDateFieldValue(new Date());
 
 // A timer that was running when the page was closed keeps running.
 const timerLeftRunning = loadRunning();

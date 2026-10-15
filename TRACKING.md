@@ -185,3 +185,24 @@ See [PLAN.md](PLAN.md) for the plan itself.
 - A separate end date. The end is always on the same date as the start. An entry that ran past midnight can still be edited as long as its times aren't changed. Changing them to cross midnight isn't possible yet, which is rare enough to leave for now.
 
 **Checked:** changed only the description: the duration stayed the same, seconds included. Changed the end time: the duration and today's total followed. Cancelled an edit: nothing changed. Entered an end before the start: refused with a message, still in edit mode. Moved an entry to another date: it left today's total. Reopened the app: all changes were kept.
+
+---
+
+## Step 11: Add an entry by hand
+
+**Date:** 2026-10-15
+
+**What:** under the timer there is a link **Add an entry by hand**. It opens a small form: description, date, start and end, and an **Add** button. The date is filled in with today. After adding, the entry appears in its right place in the list, today's total updates, and the form is cleared for the next one, keeping the date.
+
+**Why:** for when you forgot to start the timer. This is the last Gold requirement.
+
+**Decisions:**
+
+- **The form is folded away until you need it.** Most of the time you use the timer, so the form shouldn't take up space.
+- **The checks on the times are now shared** between editing and adding: one place that decides what is wrong with a start and an end. Before, the rules lived inside the editing code. Now step 12 can improve the messages in one place for both.
+
+**Decided against:**
+
+- Adding the new entry at the top of the list. The list is ordered by start time, so an entry for this morning belongs among this morning's entries, wherever that is.
+
+**Checked:** added an entry between two others: it appeared between them, and the total went up by its duration. Added one for an earlier day: it went to the bottom, and today's total didn't change. Tried an end before the start, and an empty end: refused with a message, nothing added, and the fields kept what I typed. Reopened the app: the entries were still there.
