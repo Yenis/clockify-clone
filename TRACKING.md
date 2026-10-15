@@ -122,3 +122,27 @@ See [PLAN.md](PLAN.md) for the plan itself.
 **Detail worth knowing:** when you press Stop, the entry is saved first and the running timer is cleared second. If something went wrong between the two, you would get a duplicate entry, which is easy to delete, instead of losing the time.
 
 **Checked:** started the timer, typed a description, closed the tab, reopened `index.html` a minute later: the timer was still running with the full time and the same description. Stopped it: the entry has the right start and end.
+
+---
+
+## Step 8: Today's total
+
+**Date:** 2026-10-15
+
+**What:** above the list, on the right, the app shows **Today** with the total time of today's entries. While the timer runs, the total counts up with it, second by second.
+
+**Why:** "how much did I work today?" is the question people open a time tracker to answer. This was the last Silver requirement.
+
+**Decisions:**
+
+- **The running timer counts in the total.** The plan said "today's entries only", but a total that stands still while you are working looked broken. The total now grows with the clock, and stays the same when you press Stop, because the time moves from the timer into an entry.
+- **An entry counts for the day it started on.** An entry from 23:30 to 00:30 counts for the first day, all of it.
+
+**Decided against:**
+
+- Splitting entries at midnight. It would be more exact, but it makes the total harder to check by hand, and working past midnight is rare.
+- A total per day for every day in the list. That is a nice extra, not a requirement.
+
+**Checked:** with entries from yesterday and today, the total adds up today's only. Started the timer: the total counted up with it. Stopped it: the total stayed the same.
+
+**Silver is done.**

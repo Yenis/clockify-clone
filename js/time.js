@@ -23,3 +23,11 @@ function formatTime(date) {
 function formatDate(date) {
   return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`;
 }
+
+// True when the date falls on today's date, in local time.
+function isToday(date) {
+  const now = new Date();
+  return date.getFullYear() === now.getFullYear()
+    && date.getMonth() === now.getMonth()
+    && date.getDate() === now.getDate();
+}

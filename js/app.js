@@ -6,6 +6,7 @@ const startStopButton = document.getElementById('start-stop');
 const emptyMessage = document.getElementById('empty-message');
 const entriesTable = document.getElementById('entries-table');
 const entriesBody = document.getElementById('entries-body');
+const todayTotal = document.getElementById('today-total');
 
 // All finished entries: { id, description, start, end }.
 // start and end are stored as ISO text, for example "2026-10-15T07:00:00.000Z".
@@ -59,6 +60,21 @@ function newId() {
 function updateClock() {
   const elapsed = runningSince ? Date.now() - runningSince.getTime() : 0;
   clock.textContent = formatDuration(elapsed);
+  updateTodayTotal();
+}
+
+// Adds up today's entries, plus the running timer if it was started today.
+// An entry counts for the day it started on.
+function updateTodayTotal() {
+  let total = 0;
+  for (const entry of entries) {
+    const start = new Date(entry.start);
+    if (isToday(start)) total += new Date(entry.end) - start;
+  }
+  if (runningSince && isToday(runningSince)) {
+    total += Date.now() - runningSince.getTime();
+  }
+  todayTotal.textContent = formatDuration(total);
 }
 
 function updateTimerBar() {
@@ -75,6 +91,7 @@ function renderEntries() {
   entriesBody.replaceChildren(...newestFirst.map(entryRow));
   emptyMessage.hidden = entries.length > 0;
   entriesTable.hidden = entries.length === 0;
+  updateTodayTotal();
 }
 
 function entryRow(entry) {
