@@ -175,6 +175,24 @@ body {
   text-align: right;
 }
 
+.entries-table .actions .button + .button {
+  margin-left: 6px;
+}
+
+.entries-table tr.editing {
+  background: #e8f5fd;
+}
+
+.edit-field {
+  width: 100%;
+  font: inherit;
+  font-size: 15px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
 .button-small {
   font-size: 13px;
   padding: 4px 10px;

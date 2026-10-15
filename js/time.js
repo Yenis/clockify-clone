@@ -31,3 +31,21 @@ function isToday(date) {
     && date.getMonth() === now.getMonth()
     && date.getDate() === now.getDate();
 }
+
+// The value a date field expects, for example 2026-10-15.
+function toDateFieldValue(date) {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+// Turns the values of a date field and a time field into a Date, in local time.
+// Returns null if either is empty or not a real date.
+function fromDateAndTimeFields(dateValue, timeValue) {
+  const dateParts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateValue);
+  const timeParts = /^(\d{2}):(\d{2})$/.exec(timeValue);
+  if (!dateParts || !timeParts) return null;
+
+  const [, year, month, day] = dateParts.map(Number);
+  const [, hours, minutes] = timeParts.map(Number);
+  const date = new Date(year, month - 1, day, hours, minutes);
+  return Number.isNaN(date.getTime()) ? null : date;
+}

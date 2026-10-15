@@ -163,3 +163,25 @@ See [PLAN.md](PLAN.md) for the plan itself.
 - An "undo" button after deleting. It is friendlier than a question, but it is more work, and the question is enough for now.
 
 **Checked:** deleted an entry and cancelled: nothing changed. Deleted it again and confirmed: gone, and the total went down by its duration. Reopened the app: still gone.
+
+---
+
+## Step 10: Edit an entry
+
+**Date:** 2026-10-15
+
+**What:** every row has an **Edit** button next to Delete. Clicking it turns that row into fields: description, date, start time and end time, with **Save** and **Cancel**. Enter in a field saves, Escape cancels. After saving, the duration and today's total update, and the change is saved.
+
+**Why:** a timer you forgot to stop, or started late, leaves a wrong entry. Editing fixes it without deleting and starting over. This is the second Gold requirement.
+
+**Decisions:**
+
+- **Editing happens in the row itself**, not in a separate window. You see what you are changing in its place in the list.
+- **Times you don't touch keep their seconds.** The time fields show hours and minutes only. If you change only the description, the start and end stay exactly as they were, so the duration doesn't change by a few seconds.
+- **For now, wrong input gets a simple pop-up message** and nothing is saved: an end time before the start time, or an empty field. Step 12 replaces these pop-ups with clearer messages next to the fields.
+
+**Decided against:**
+
+- A separate end date. The end is always on the same date as the start. An entry that ran past midnight can still be edited as long as its times aren't changed. Changing them to cross midnight isn't possible yet, which is rare enough to leave for now.
+
+**Checked:** changed only the description: the duration stayed the same, seconds included. Changed the end time: the duration and today's total followed. Cancelled an edit: nothing changed. Entered an end before the start: refused with a message, still in edit mode. Moved an entry to another date: it left today's total. Reopened the app: all changes were kept.
