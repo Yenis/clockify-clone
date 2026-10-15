@@ -105,8 +105,36 @@ function entryRow(entry) {
     cell(formatTime(start)),
     cell(formatTime(end)),
     cell(formatDuration(end - start), 'duration'),
+    actionsCell(entry),
   );
   return row;
+}
+
+// The buttons at the end of each row. They carry the entry's id,
+// so a click knows which entry it is about.
+function actionsCell(entry) {
+  const deleteButton = document.createElement('button');
+  deleteButton.type = 'button';
+  deleteButton.className = 'button button-small button-danger';
+  deleteButton.textContent = 'Delete';
+  deleteButton.dataset.action = 'delete';
+  deleteButton.dataset.id = entry.id;
+
+  const td = cell('', 'actions');
+  td.append(deleteButton);
+  return td;
+}
+
+function deleteEntry(id) {
+  const entry = entries.find((e) => e.id === id);
+  if (!entry) return;
+
+  const name = entry.description || 'this entry';
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+
+  entries = entries.filter((e) => e.id !== id);
+  saveEntries(entries);
+  renderEntries();
 }
 
 function cell(text, className = '') {
@@ -122,6 +150,13 @@ startStopButton.addEventListener('click', () => {
   } else {
     startTimer();
   }
+});
+
+// One listener for all the buttons in the table, including rows added later.
+entriesBody.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-action]');
+  if (!button) return;
+  if (button.dataset.action === 'delete') deleteEntry(button.dataset.id);
 });
 
 // Remember the description of a running timer while you type it.

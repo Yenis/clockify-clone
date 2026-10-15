@@ -146,3 +146,20 @@ See [PLAN.md](PLAN.md) for the plan itself.
 **Checked:** with entries from yesterday and today, the total adds up today's only. Started the timer: the total counted up with it. Stopped it: the total stayed the same.
 
 **Silver is done.**
+
+---
+
+## Step 9: Delete an entry
+
+**Date:** 2026-10-15
+
+**What:** every row in the list has a **Delete** button at the end. Clicking it asks "Delete "…"? This cannot be undone." If you confirm, the entry disappears, today's total updates, and the change is saved. If you cancel, nothing happens.
+
+**Why:** mistakes happen: a timer started by accident, a test entry, a duplicate. This is the first Gold requirement.
+
+**Decided against:**
+
+- Deleting without asking. One click in the wrong place would lose an entry for good.
+- An "undo" button after deleting. It is friendlier than a question, but it is more work, and the question is enough for now.
+
+**Checked:** deleted an entry and cancelled: nothing changed. Deleted it again and confirmed: gone, and the total went down by its duration. Reopened the app: still gone.
