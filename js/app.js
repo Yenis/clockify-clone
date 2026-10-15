@@ -16,8 +16,11 @@ let runningSince = null;
 // The repeating update of the clock while the timer runs.
 let clockTicker = null;
 
-function startTimer() {
-  runningSince = new Date();
+// Starts the timer now, or from an earlier moment when we pick up
+// a timer that was still running when the page was closed.
+function startTimer(since = new Date()) {
+  runningSince = since;
+  saveRunningTimer();
   clockTicker = setInterval(updateClock, 1000);
   updateTimerBar();
 }
@@ -29,7 +32,10 @@ function stopTimer() {
     start: runningSince.toISOString(),
     end: new Date().toISOString(),
   });
+  // The entry is saved before the running timer is cleared, so a crash
+  // in between can leave a duplicate, but never lose your time.
   saveEntries(entries);
+  saveRunning(null);
   descriptionInput.value = '';
 
   clearInterval(clockTicker);
@@ -37,6 +43,10 @@ function stopTimer() {
   runningSince = null;
   updateTimerBar();
   renderEntries();
+}
+
+function saveRunningTimer() {
+  saveRunning({ start: runningSince.toISOString(), description: descriptionInput.value });
 }
 
 // A short unique name for an entry, for example "mgq3k1x7a9".
@@ -97,4 +107,16 @@ startStopButton.addEventListener('click', () => {
   }
 });
 
+// Remember the description of a running timer while you type it.
+descriptionInput.addEventListener('input', () => {
+  if (runningSince) saveRunningTimer();
+});
+
 renderEntries();
+
+// A timer that was running when the page was closed keeps running.
+const timerLeftRunning = loadRunning();
+if (timerLeftRunning) {
+  descriptionInput.value = timerLeftRunning.description;
+  startTimer(new Date(timerLeftRunning.start));
+}

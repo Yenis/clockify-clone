@@ -103,3 +103,22 @@ See [PLAN.md](PLAN.md) for the plan itself.
 **Found while checking:** in a browser that doesn't allow sites to store data, the first version crashed while loading, and then even the timer stopped working. Now the app keeps working without storage: the timer and the list still work, and it warns you that your entries can't be saved.
 
 **Checked:** added two entries, closed the tab, opened `index.html` again: both entries were still there, newest first.
+
+---
+
+## Step 7: A running timer survives closing the app
+
+**Date:** 2026-10-15
+
+**What:** when you press Start, the app now also saves the start time and the description of the running timer, and keeps the description up to date while you type. When the page opens and a timer was still running, it carries on: the clock shows the full time since you pressed Start, and the description is back in its field. Stopping the timer forgets the running timer.
+
+**Why:** people close tabs and laptops while the timer runs. Without this, closing the tab would throw away the time since Start.
+
+**Decided against:**
+
+- Stopping the timer automatically when the page closes. You may close the tab and still be working, so the time should keep counting.
+- Keeping two open tabs in step with each other. If you open the app in two tabs, each shows what was saved when it opened. One tab is enough for now.
+
+**Detail worth knowing:** when you press Stop, the entry is saved first and the running timer is cleared second. If something went wrong between the two, you would get a duplicate entry, which is easy to delete, instead of losing the time.
+
+**Checked:** started the timer, typed a description, closed the tab, reopened `index.html` a minute later: the timer was still running with the full time and the same description. Stopped it: the entry has the right start and end.
