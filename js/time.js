@@ -13,3 +13,13 @@ function formatDuration(milliseconds) {
   const seconds = totalSeconds % 60;
   return `${hours}:${pad(minutes)}:${pad(seconds)}`;
 }
+
+// Formats the time of day on a 24-hour clock, for example 09:05.
+function formatTime(date) {
+  return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+// Formats a date the way it is written in Bosnia and Herzegovina, for example 15.10.2026.
+function formatDate(date) {
+  return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`;
+}

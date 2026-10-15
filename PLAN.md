@@ -43,8 +43,10 @@ Each entry has four things:
 |---|---|---|
 | `id` | `k3x9a2` | A unique name, so we can find the entry to edit or delete it |
 | `description` | `Writing the plan` | What you worked on |
-| `start` | `2026-10-15T09:00:00` | When you started |
-| `end` | `2026-10-15T10:30:00` | When you stopped |
+| `start` | `2026-10-15T07:00:00.000Z` | When you started |
+| `end` | `2026-10-15T08:30:00.000Z` | When you stopped |
+
+Times are stored in world time (UTC, the `Z` at the end) and shown in your local time: the two examples above are 09:00 and 10:30 in Sarajevo in October. This keeps durations right on the night the clocks change.
 
 The duration is not stored. It is always worked out from start and end, so the two can never disagree.
 

@@ -65,3 +65,22 @@ See [PLAN.md](PLAN.md) for the plan itself.
 - Adding one second to the clock on every tick. Browsers sometimes run timers late, for example in a background tab, so the clock would drift. Instead, every tick works out the time again from the moment you pressed Start.
 
 **Checked:** clicked Start, watched the clock count, clicked Stop: back to 0:00:00 and the button says Start again.
+
+---
+
+## Step 5: Stopping the timer adds an entry to the list
+
+**Date:** 2026-10-15
+
+**What:** when you click Stop, the app creates an entry with the description, the start time and the end time, clears the description field, and shows the entry in a table: description, date, start, end and duration, newest first. An entry without a description shows "(no description)". The entries are kept only while the page is open: reloading the page loses them. That is the next step.
+
+**Why:** this turns the timer into a record of your work, which is what the app is for.
+
+**Changed in the plan:** times are now stored in world time (UTC) instead of local time, and shown in local time. Local time without a time zone is ambiguous on the night in October when the clocks go back: 02:30 happens twice. With world time, every duration stays correct. `PLAN.md` is updated to match.
+
+**Decided against:**
+
+- Storing the duration. As planned, it is worked out from start and end every time.
+- Building the table rows from text with HTML in it. A description like `<b>hello</b>` would then change the page. Each cell is filled as plain text, so whatever you type is shown exactly as typed.
+
+**Checked:** started and stopped the timer three times, one of them without a description: three rows, newest first, with the right times and durations.
