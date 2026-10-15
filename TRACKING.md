@@ -32,3 +32,20 @@ See [PLAN.md](PLAN.md) for the plan itself.
 **Why:** git records **what** changed. This file records **why**, so that anyone who opens the project later, including Claude in a new conversation, can follow the reasoning.
 
 **Checked:** the file exists.
+
+---
+
+## Step 3: An empty page with the app's layout
+
+**Date:** 2026-10-15
+
+**What:** created `index.html` (the page) and `styles.css` (how it looks). The page shows the title, a field for the description, a clock at 0:00:00, a Start button, and "No entries yet." Nothing works yet: the button does nothing.
+
+**Why:** we see the shape of the app before adding any behaviour. Each later step fills in one part of this page.
+
+**Decided against:**
+
+- Adding the JavaScript files now, empty. Files are added in the step that needs them, so each commit shows something real.
+- Putting the styles inside the HTML file. A separate file keeps "what is on the page" apart from "how it looks", which makes the changes in later steps easier to follow.
+
+**Checked:** opened `index.html` in the browser: title, input, clock, Start button and "No entries yet." are all there.

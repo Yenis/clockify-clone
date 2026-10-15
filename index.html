@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Time Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Time Tracker</h1>
+  </header>
+
+  <main class="app">
+    <section class="timer-bar" aria-label="Timer">
+      <input id="description" class="timer-description" type="text"
+             placeholder="What are you working on?" autocomplete="off">
+      <span id="clock" class="timer-clock">0:00:00</span>
+      <button id="start-stop" class="button button-primary" type="button">Start</button>
+    </section>
+
+    <section class="entries" aria-label="Entries">
+      <h2>Entries</h2>
+      <p id="empty-message" class="empty-message">No entries yet.</p>
+    </section>
+  </main>
+</body>
+</html>
