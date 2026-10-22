@@ -281,3 +281,23 @@ The messages say exactly what to fix:
 - The font's separate files for each weight. Rubik comes as one "variable" file that has every weight from light to black.
 
 **Checked:** opened `index.html` straight from the file: the browser reports Rubik as loaded, and the text is in Rubik. Rubik's license (SIL Open Font License) allows shipping it inside an app, as long as the license file goes with it.
+
+---
+
+## Step 16: The green look
+
+**Date:** 2026-10-22
+
+**What:** a new look for the whole app. A dark green bar at the top with a small stopwatch logo; white cards with rounded corners on a pale green background; a bigger clock; green buttons, and a red Stop button. While the timer runs, the timer card gets a green edge and the clock turns green. Today's total sits in a green label next to the "Entries" heading. Adding by hand opens with a round plus sign.
+
+On a phone-sized screen everything goes into one column: the clock and Stop share a line under the description, and each entry becomes a small card with its description and duration on top and the date, times and buttons underneath. While editing on a small screen, each field shows its name above it, because the column headings are hidden there.
+
+**Why:** the old look was a quick first version. The new one is calmer and easier to read, and the phone layout is needed for Gold, when the app runs on a phone.
+
+**Decided against:**
+
+- A menu down the left side. It takes space the list needs, and on a phone it would have to fold away. The pages we add later go in the green bar at the top instead.
+- Round "pill" buttons and a decorative heading font. Rounded corners with one plain font keep it simple and easy to read.
+- Changing what the app does. This step changes only how it looks, so if something breaks, we know it's the look.
+
+**Checked:** with seven entries over three days and a running timer, on a wide window and on a phone-sized one (390 pixels wide): the timer, the form, the list, an entry being edited and an entry without a description all look right, and nothing overflows. Start, Stop, Edit, Save and Delete still work as before.

@@ -4,15 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Time Tracker</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='10' fill='%23bfe3cf'/%3E%3Cg fill='none' stroke='%2316382a' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='18' cy='20' r='9'/%3E%3Cpath d='M15 7.5h6M18 7.5v3.5M18 20l3.5-3.5M26 12.5l1.5-1.5'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="app-header">
-    <h1>Time Tracker</h1>
+    <div class="app-header-inner">
+      <div class="brand">
+        <svg class="brand-logo" viewBox="0 0 36 36" aria-hidden="true">
+          <rect width="36" height="36" rx="10" fill="#bfe3cf"/>
+          <g fill="none" stroke="#16382a" stroke-width="2.4" stroke-linecap="round">
+            <circle cx="18" cy="20" r="9"/>
+            <path d="M15 7.5h6M18 7.5v3.5M18 20l3.5-3.5M26 12.5l1.5-1.5"/>
+          </g>
+        </svg>
+        <h1>Time Tracker</h1>
+      </div>
+    </div>
   </header>
 
   <main class="app">
-    <section class="timer-bar" aria-label="Timer">
+    <section id="timer-bar" class="timer-bar card" aria-label="Timer">
       <input id="description" class="timer-description" type="text"
              placeholder="What are you working on?" autocomplete="off">
       <span id="clock" class="timer-clock">0:00:00</span>
@@ -21,7 +33,7 @@
 
     <details class="manual-entry">
       <summary>Add an entry by hand</summary>
-      <form id="manual-form" class="manual-form" novalidate>
+      <form id="manual-form" class="manual-form card" novalidate>
         <label class="manual-description">
           Description
           <input name="description" data-field="description" type="text" class="edit-field" autocomplete="off"
@@ -49,8 +61,8 @@
         <h2>Entries</h2>
         <p class="today-total">Today <strong id="today-total">0:00:00</strong></p>
       </div>
-      <p id="empty-message" class="empty-message">No entries yet.</p>
-      <table id="entries-table" class="entries-table" hidden>
+      <p id="empty-message" class="empty-message card">No entries yet.</p>
+      <table id="entries-table" class="entries-table card" hidden>
         <thead>
           <tr>
             <th>Description</th>

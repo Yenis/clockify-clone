@@ -1,14 +1,3 @@
-:root {
-  --background: #f2f6f8;
-  --surface: #ffffff;
-  --border: #dde3e7;
-  --text: #333d47;
-  --muted: #7a8792;
-  --primary: #03a9f4;
-  --primary-dark: #0288d1;
-  --danger: #e53935;
-}
-
 /* The font is kept inside the app, so the text looks the same without internet.
    Rubik, SIL Open Font License: see fonts/OFL-Rubik.txt. */
 @font-face {
@@ -16,6 +5,25 @@
   src: url("fonts/Rubik-VF.ttf") format("truetype");
   font-weight: 300 900;
   font-display: swap;
+}
+
+:root {
+  --forest: #16382a;        /* the bar at the top */
+  --background: #edf3ee;    /* pale green behind the cards */
+  --surface: #ffffff;
+  --surface-soft: #f5f9f6;
+  --border: #d8e3db;
+  --text: #1d2b24;
+  --muted: #66786e;
+  --primary: #2d7a55;
+  --primary-dark: #1f5e40;
+  --primary-soft: #e3f1e8;
+  --mint: #bfe3cf;
+  --danger: #c2412d;
+  --danger-soft: #fbeae6;
+  --radius: 16px;
+  --radius-small: 10px;
+  --shadow: 0 1px 2px rgba(22, 56, 42, 0.06), 0 6px 20px rgba(22, 56, 42, 0.05);
 }
 
 * {
@@ -28,112 +36,207 @@ body {
   color: var(--text);
   font-family: "Rubik", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
+  line-height: 1.4;
 }
 
+input,
+button,
+select {
+  font: inherit;
+}
+
+/* The bar at the top: logo and name */
+
 .app-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
+  background: var(--forest);
+  color: #ffffff;
+}
+
+.app-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 14px 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 36px;
+  height: 36px;
+  flex: none;
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 22px;
-  color: var(--primary-dark);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .app {
-  max-width: 960px;
-  margin: 24px auto;
+  max-width: 1040px;
+  margin: 28px auto;
   padding: 0 16px;
 }
 
-/* The bar at the top: description, clock, Start/Stop */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* The timer: description, clock, Start/Stop */
 
 .timer-bar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 12px 16px;
+  gap: 20px;
+  padding: 16px 16px 16px 24px;
+  border-left: 6px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.timer-bar.running {
+  border-left-color: var(--primary);
 }
 
 .timer-description {
   flex: 1;
+  min-width: 0;
   border: none;
-  font-size: 16px;
-  padding: 8px 0;
+  font-size: 18px;
+  padding: 10px 0;
   outline: none;
   color: var(--text);
+  background: transparent;
+}
+
+.timer-description::placeholder {
+  color: var(--muted);
 }
 
 .timer-clock {
   font-variant-numeric: tabular-nums;
-  font-size: 20px;
-  font-weight: 600;
-  min-width: 90px;
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  min-width: 130px;
   text-align: right;
+}
+
+.timer-bar.running .timer-clock {
+  color: var(--primary-dark);
 }
 
 /* Adding an entry by hand */
 
 .manual-entry {
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .manual-entry summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
   color: var(--primary-dark);
+  font-weight: 500;
+  padding: 6px 4px;
+  list-style: none;
+}
+
+.manual-entry summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A plus sign that turns into a minus when the form is open */
+.manual-entry summary::before {
+  content: "+";
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary-soft);
   font-weight: 600;
-  padding: 4px 0;
+  line-height: 1;
+}
+
+.manual-entry[open] summary::before {
+  content: "\2212";
 }
 
 .manual-form {
   display: flex;
   align-items: flex-end;
   flex-wrap: wrap;
-  gap: 12px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 12px 16px;
+  gap: 12px 14px;
+  padding: 18px 20px;
   margin-top: 8px;
 }
 
 .manual-form label {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  font-size: 13px;
+  gap: 6px;
+  font-size: 14px;
   color: var(--muted);
 }
 
 .manual-form .manual-description {
   flex: 1;
-  min-width: 200px;
+  min-width: 220px;
 }
 
 /* Buttons */
 
 .button {
   border: 1px solid var(--border);
+  border-radius: var(--radius-small);
   background: var(--surface);
   color: var(--text);
   font-size: 15px;
-  padding: 8px 16px;
+  font-weight: 500;
+  padding: 9px 18px;
   cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.button:hover {
+  border-color: var(--primary);
+}
+
+.button:focus-visible,
+.edit-field:focus-visible,
+.manual-entry summary:focus-visible {
+  outline: 3px solid var(--mint);
+  outline-offset: 1px;
 }
 
 .button-primary {
   background: var(--primary);
   border-color: var(--primary);
   color: #ffffff;
-  font-weight: 600;
-  min-width: 90px;
+  min-width: 96px;
 }
 
 .button-primary:hover {
   background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+#start-stop {
+  min-width: 120px;
+  padding: 13px 24px;
+  font-size: 17px;
+  border-radius: 12px;
 }
 
 .button-stop,
@@ -142,42 +245,64 @@ body {
   border-color: var(--danger);
 }
 
+.button-small {
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 8px;
+}
+
+.button-danger {
+  color: var(--danger);
+}
+
+.button-danger:hover {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+
 /* The list of entries */
 
 .entries {
-  margin-top: 32px;
+  margin-top: 36px;
 }
 
 .entries-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  gap: 12px;
+  margin: 0 4px 12px;
 }
 
 .entries h2 {
-  font-size: 16px;
-  color: var(--muted);
+  font-size: 20px;
   font-weight: 600;
   margin: 0;
 }
 
 .today-total {
   margin: 0;
-  color: var(--muted);
+  padding: 6px 8px 6px 14px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-weight: 500;
 }
 
 .today-total strong {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--surface);
   color: var(--text);
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  margin-left: 8px;
 }
 
 .empty-message {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 24px 16px;
+  padding: 32px 16px;
   margin: 0;
   color: var(--muted);
   text-align: center;
@@ -186,33 +311,57 @@ body {
 .entries-table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--surface);
-  border: 1px solid var(--border);
+  overflow: hidden;
 }
 
 .entries-table th,
 .entries-table td {
-  padding: 12px 16px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--border);
   text-align: left;
 }
 
+.entries-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
 .entries-table th {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   color: var(--muted);
   text-transform: uppercase;
+  background: var(--surface-soft);
+}
+
+.entries-table th:first-child {
+  width: 36%;
+}
+
+.entries-table td.description {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.entries-table td.start,
+.entries-table td.end,
+.entries-table td.date {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .entries-table .duration {
   text-align: right;
   font-variant-numeric: tabular-nums;
   font-weight: 600;
+  white-space: nowrap;
 }
 
-.muted {
+.entries-table td.muted {
   color: var(--muted);
   font-style: italic;
+  font-weight: 400;
 }
 
 .entries-table .actions {
@@ -225,31 +374,19 @@ body {
   margin-left: 6px;
 }
 
-.entries-table tr.editing {
-  background: #e8f5fd;
+.entries-table tr.editing td,
+.entries-table tr.edit-message td {
+  background: var(--primary-soft);
 }
 
 .edit-field {
   width: 100%;
-  font: inherit;
   font-size: 15px;
-  padding: 4px 6px;
+  padding: 8px 10px;
   border: 1px solid var(--border);
+  border-radius: 8px;
   background: var(--surface);
   color: var(--text);
-}
-
-.button-small {
-  font-size: 13px;
-  padding: 4px 10px;
-}
-
-.button-danger {
-  color: var(--danger);
-}
-
-.button-danger:hover {
-  border-color: var(--danger);
 }
 
 /* Read by screen readers, not shown on screen */
@@ -269,15 +406,133 @@ body {
   margin: 0;
   color: var(--danger);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .edit-field[aria-invalid="true"] {
   border-color: var(--danger);
-  background: #fdecea;
+  background: var(--danger-soft);
 }
 
 .entries-table tr.edit-message td {
-  background: #e8f5fd;
   padding-top: 0;
+}
+
+/* A phone-sized screen: everything in one column, and each entry as a small card */
+
+@media (max-width: 640px) {
+  .app {
+    margin-top: 16px;
+  }
+
+  .timer-bar {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding: 12px 12px 12px 18px;
+  }
+
+  .timer-description {
+    flex-basis: 100%;
+  }
+
+  .timer-clock {
+    flex: 1;
+    text-align: left;
+    font-size: 28px;
+  }
+
+  .manual-form label,
+  .manual-form .button {
+    flex: 1 1 40%;
+  }
+
+  .manual-form .manual-description {
+    flex-basis: 100%;
+  }
+
+  .entries-table thead {
+    display: none;
+  }
+
+  .entries-table,
+  .entries-table tbody {
+    display: block;
+  }
+
+  .entries-table tr {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: 4px 6px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .entries-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .entries-table td,
+  .entries-table th {
+    padding: 0;
+    border: none;
+  }
+
+  .entries-table td.description {
+    grid-column: 1 / 4;
+  }
+
+  .entries-table td.duration {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
+  .entries-table td.end::before {
+    content: "\2013\00a0";
+  }
+
+  .entries-table td.actions {
+    width: auto;
+    grid-column: 4;
+  }
+
+  /* While editing, the fields go under each other, each with its name above it */
+  .entries-table tr.editing {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: var(--primary-soft);
+  }
+
+  .entries-table tr.editing td {
+    grid-column: auto;
+    grid-row: auto;
+    text-align: left;
+  }
+
+  .entries-table tr.editing td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .entries-table tr.editing td.description,
+  .entries-table tr.editing td.actions {
+    grid-column: 1 / -1;
+  }
+
+  .entries-table tr.editing td.end::before {
+    content: attr(data-label);
+  }
+
+  .entries-table tr.edit-message {
+    display: block;
+    padding: 0 14px 12px;
+    background: var(--primary-soft);
+  }
+
+  .entries-table tr.edit-message td {
+    display: block;
+  }
 }

@@ -3,6 +3,7 @@
 const descriptionInput = document.getElementById('description');
 const clock = document.getElementById('clock');
 const startStopButton = document.getElementById('start-stop');
+const timerBar = document.getElementById('timer-bar');
 const emptyMessage = document.getElementById('empty-message');
 const entriesTable = document.getElementById('entries-table');
 const entriesBody = document.getElementById('entries-body');
@@ -85,6 +86,7 @@ function updateTimerBar() {
   const running = runningSince !== null;
   startStopButton.textContent = running ? 'Stop' : 'Start';
   startStopButton.classList.toggle('button-stop', running);
+  timerBar.classList.toggle('running', running);
   updateClock();
 }
 
@@ -106,10 +108,10 @@ function entryRow(entry) {
 
   const row = document.createElement('tr');
   row.append(
-    cell(entry.description || '(no description)', entry.description ? '' : 'muted'),
-    cell(formatDate(start)),
-    cell(formatTime(start)),
-    cell(formatTime(end)),
+    cell(entry.description || '(no description)', entry.description ? 'description' : 'description muted'),
+    cell(formatDate(start), 'date'),
+    cell(formatTime(start), 'start'),
+    cell(formatTime(end), 'end'),
     cell(formatDuration(end - start), 'duration'),
     actionsCell(entry),
   );
@@ -170,7 +172,9 @@ function fieldCell(type, field, value, label) {
   input.dataset.field = field;
   input.setAttribute('aria-label', label);
 
-  const td = cell('');
+  // On a phone-sized screen the column headings are hidden, so each field shows its name.
+  const td = cell('', field);
+  td.dataset.label = label;
   td.append(input);
   return td;
 }
