@@ -442,3 +442,23 @@ The heading of the week also says **Next week** now, for the week after this one
 - Exporting the week shown above automatically. A range of dates is what the Silver item asks for, and it can be a month or a single day.
 
 **Checked:** exported 15–20 October in both kinds and read the files back: 14 entries, oldest first, the right columns, the decimal comma in the semicolon kind and the decimal point in the comma kind, and the UTF-8 mark at the start. A description with quotes and `=` at the start, and a tag with "Č", came out correctly. A last date before the first date: a message, and no file. Checked the card on a phone-sized window.
+
+---
+
+## Step 23: Privacy policy and terms of service
+
+**Date:** 2026-10-22
+
+**What:** added `privacy-policy.md` and `terms-of-service.md`, with the sentences from Part 3 of the git practice assignment, as they stand at the end of it: the privacy policy without the Settings sentence (the app has no Settings page) and without the sentence about selling data (reverted in G1), and the terms with all five sentences from B4 and G2.
+
+**Why:** the last Silver item shows both documents inside the app. They are written first, as their own files, so each can be changed and reviewed on its own.
+
+**Decisions:**
+
+- **The terms show the date of the last change,** at the bottom. The terms promise it ("we will show the date of the last change here"), so it has to be there.
+
+**Decided against:**
+
+- Adding promises the app can't keep yet, such as deleting all your data from a Settings page. Every sentence has to be true of the app as it is.
+
+**Checked:** read both files against the assignment and against the app: every sentence is true of the app today.

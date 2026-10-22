@@ -75,6 +75,7 @@ The duration is not stored. It is always worked out from start and end, so the t
 | `js/reports.js` | The Reports page: the week, the tags, the export |
 | `js/app.js` | Connects the page to the logic: buttons, list, totals |
 | `fonts/` | The Rubik font and its license |
+| `privacy-policy.md`, `terms-of-service.md` | The privacy policy and terms of service |
 
 ## Steps
 
