@@ -20,59 +20,69 @@
         </svg>
         <h1>Time Tracker</h1>
       </div>
+      <nav class="app-nav" aria-label="Pages">
+        <a href="#timer" data-page-link="timer">Timer <span id="nav-clock" class="nav-clock" hidden></span></a>
+        <a href="#reports" data-page-link="reports">Reports</a>
+      </nav>
     </div>
   </header>
 
   <main class="app">
-    <section id="timer-bar" class="timer-bar card" aria-label="Timer">
-      <input id="description" class="timer-description" type="text"
-             placeholder="What are you working on?" autocomplete="off">
-      <input id="tag" class="timer-tag" type="text" list="tag-options"
-             placeholder="Tag" aria-label="Tag" autocomplete="off">
-      <span id="clock" class="timer-clock">0:00:00</span>
-      <button id="start-stop" class="button button-primary" type="button">Start</button>
-    </section>
+    <div id="page-timer" class="page" data-page="timer">
+      <section id="timer-bar" class="timer-bar card" aria-label="Timer">
+        <input id="description" class="timer-description" type="text"
+               placeholder="What are you working on?" autocomplete="off">
+        <input id="tag" class="timer-tag" type="text" list="tag-options"
+               placeholder="Tag" aria-label="Tag" autocomplete="off">
+        <span id="clock" class="timer-clock">0:00:00</span>
+        <button id="start-stop" class="button button-primary" type="button">Start</button>
+      </section>
 
-    <details class="manual-entry">
-      <summary>Add an entry by hand</summary>
-      <form id="manual-form" class="manual-form card" novalidate>
-        <label class="manual-description">
-          Description
-          <input name="description" data-field="description" type="text" class="edit-field" autocomplete="off"
-                 placeholder="What did you work on?">
-        </label>
-        <label class="manual-tag">
-          Tag
-          <input name="tag" data-field="tag" type="text" class="edit-field" list="tag-options"
-                 autocomplete="off" placeholder="Optional">
-        </label>
-        <label>
-          Date
-          <input name="date" data-field="date" type="date" class="edit-field">
-        </label>
-        <label>
-          Start
-          <input name="start" data-field="start" type="time" class="edit-field">
-        </label>
-        <label>
-          End
-          <input name="end" data-field="end" type="time" class="edit-field">
-        </label>
-        <button class="button button-primary" type="submit">Add</button>
-        <p id="manual-error" class="form-error" role="alert" hidden></p>
-      </form>
-    </details>
+      <details class="manual-entry">
+        <summary>Add an entry by hand</summary>
+        <form id="manual-form" class="manual-form card" novalidate>
+          <label class="manual-description">
+            Description
+            <input name="description" data-field="description" type="text" class="edit-field" autocomplete="off"
+                   placeholder="What did you work on?">
+          </label>
+          <label class="manual-tag">
+            Tag
+            <input name="tag" data-field="tag" type="text" class="edit-field" list="tag-options"
+                   autocomplete="off" placeholder="Optional">
+          </label>
+          <label>
+            Date
+            <input name="date" data-field="date" type="date" class="edit-field">
+          </label>
+          <label>
+            Start
+            <input name="start" data-field="start" type="time" class="edit-field">
+          </label>
+          <label>
+            End
+            <input name="end" data-field="end" type="time" class="edit-field">
+          </label>
+          <button class="button button-primary" type="submit">Add</button>
+          <p id="manual-error" class="form-error" role="alert" hidden></p>
+        </form>
+      </details>
 
-    <section class="entries" aria-label="Entries">
-      <div class="entries-header">
-        <h2>Entries</h2>
-        <p class="today-total">Today <strong id="today-total">0:00:00</strong></p>
-      </div>
-      <p id="empty-message" class="empty-message card">No entries yet.</p>
-      <table id="entries-table" class="entries-table card" hidden>
-        <tbody id="entries-body"></tbody>
-      </table>
-    </section>
+      <section class="entries" aria-label="Entries">
+        <div class="entries-header">
+          <h2>Entries</h2>
+          <p class="today-total">Today <strong id="today-total">0:00:00</strong></p>
+        </div>
+        <p id="empty-message" class="empty-message card">No entries yet.</p>
+        <table id="entries-table" class="entries-table card" hidden>
+          <tbody id="entries-body"></tbody>
+        </table>
+      </section>
+    </div>
+
+    <div id="page-reports" class="page" data-page="reports" hidden>
+      <h2 class="page-title">Reports</h2>
+    </div>
   </main>
 
   <!-- Suggestions for every tag field: the tags used so far -->
@@ -80,6 +90,7 @@
 
   <script src="js/time.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/pages.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

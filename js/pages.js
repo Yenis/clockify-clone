@@ -1,0 +1,31 @@
+// Switching between the pages of the app: Timer and Reports.
+// The page is part of the address (#timer, #reports), so it stays the same
+// after reloading, and the browser's Back button goes to the previous page.
+
+const PAGES = ['timer', 'reports'];
+const PAGE_TITLES = { timer: 'Time Tracker', reports: 'Reports · Time Tracker' };
+
+// The page named in the address, or the timer when it names none we know.
+function currentPage() {
+  const name = location.hash.slice(1);
+  return PAGES.includes(name) ? name : 'timer';
+}
+
+function showPage() {
+  const page = currentPage();
+  for (const section of document.querySelectorAll('[data-page]')) {
+    section.hidden = section.dataset.page !== page;
+  }
+  for (const link of document.querySelectorAll('[data-page-link]')) {
+    if (link.dataset.pageLink === page) {
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  }
+  document.title = PAGE_TITLES[page];
+  window.scrollTo(0, 0);
+}
+
+window.addEventListener('hashchange', showPage);
+showPage();

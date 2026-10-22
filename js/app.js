@@ -6,6 +6,7 @@ const tagOptions = document.getElementById('tag-options');
 const clock = document.getElementById('clock');
 const startStopButton = document.getElementById('start-stop');
 const timerBar = document.getElementById('timer-bar');
+const navClock = document.getElementById('nav-clock');
 const emptyMessage = document.getElementById('empty-message');
 const entriesTable = document.getElementById('entries-table');
 const entriesBody = document.getElementById('entries-body');
@@ -93,6 +94,9 @@ function newId() {
 function updateClock() {
   const elapsed = runningSince ? Date.now() - runningSince.getTime() : 0;
   clock.textContent = formatDuration(elapsed);
+  // On the other pages, the link to the timer shows the clock while it runs.
+  navClock.textContent = formatDuration(elapsed);
+  navClock.hidden = !runningSince;
   updateTodayTotal();
 }
 

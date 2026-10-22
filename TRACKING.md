@@ -348,3 +348,24 @@ Editing an entry now opens a small form across the whole row, with the name of e
 - Several tags per entry. It would make the total per tag harder to check by hand: an entry with two tags would count twice.
 
 **Checked:** stopped a timer with the tag "  Clockify   app ": saved as "Clockify app". Added an entry by hand with a tag, and changed an entry's tag by editing it: both show in the list and are still there after reloading. Started a timer with a tag and reloaded: the tag was back in its field. The suggestions list every tag once, in alphabetical order. Checked the timer and the list on a phone-sized window.
+
+---
+
+## Step 19: Two pages: Timer and Reports
+
+**Date:** 2026-10-22
+
+**What:** the green bar now has two links on the right: **Timer** and **Reports**. The link of the page you are on is light green. The Timer page is everything the app had so far. The Reports page is new and has only its heading for now; the next steps fill it. While the timer runs, the Timer link shows the running clock, so you can see it from the Reports page too. The new file `js/pages.js` does the switching.
+
+**Why:** the week report, the total per tag and the export need room, and they don't belong between the timer and the list.
+
+**Decisions:**
+
+- **The page is part of the address:** `index.html#reports`. Reloading keeps you on the same page, and the browser's Back button goes back to the page before. An address with anything else after the `#` opens the Timer.
+- **Both pages are in the same file.** Switching only shows one part and hides the other, so the timer keeps running and nothing has to load again.
+
+**Decided against:**
+
+- A separate HTML file for each page. Each would have to load the entries and the running timer again, and the timer would stop counting on screen while you look at the other page.
+
+**Checked:** clicked between the two pages: the right page shows, the link is marked and the tab's title changes. Reloaded on Reports: still on Reports. Opened `index.html#nonsense`: the Timer page. With the timer running, the clock counted next to the Timer link while on Reports. On a phone-sized window (390 and 360 pixels wide) the bar fits on one line; on the narrowest one only the logo shows, without the name.
