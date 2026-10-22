@@ -24,6 +24,26 @@ function formatDate(date) {
   return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`;
 }
 
+// Formats a date without the year, for example 19.10.
+function formatShortDate(date) {
+  return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.`;
+}
+
+// The same time of day, a number of days later (or earlier, when negative).
+// Counting in days, not hours, keeps it right on the nights the clocks change.
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+// Midnight at the start of the Monday of the week the date is in.
+function startOfWeek(date) {
+  const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const daysSinceMonday = (monday.getDay() + 6) % 7;
+  return addDays(monday, -daysSinceMonday);
+}
+
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // The heading for a day in the list: "Today", "Yesterday", or for example "Monday, 19.10.2026".

@@ -24,6 +24,8 @@ function showPage() {
     }
   }
   document.title = PAGE_TITLES[page];
+  // The reports may have changed while another page was shown, for example after midnight.
+  if (page === 'reports' && typeof renderReports === 'function') renderReports();
   window.scrollTo(0, 0);
 }
 

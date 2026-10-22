@@ -369,3 +369,26 @@ Editing an entry now opens a small form across the whole row, with the name of e
 - A separate HTML file for each page. Each would have to load the entries and the running timer again, and the timer would stop counting on screen while you look at the other page.
 
 **Checked:** clicked between the two pages: the right page shows, the link is marked and the tab's title changes. Reloaded on Reports: still on Reports. Opened `index.html#nonsense`: the Timer page. With the timer running, the clock counted next to the Timer link while on Reports. On a phone-sized window (390 and 360 pixels wide) the bar fits on one line; on the narrowest one only the logo shows, without the name.
+
+---
+
+## Step 20: This week: a total for each day and for the week
+
+**Date:** 2026-10-22
+
+**What:** the Reports page shows a week, Monday to Sunday. At the top is the **week total** in big numbers. Under it, each day has a line: its name and date, a green bar, and its total. The longest day fills the whole bar, and the other bars are as long as their share of it. Today's name is bold, and the days still to come are lighter. The arrows move a week back and forward, and **This week** jumps back to the current week. The heading says "This week", "Last week", or "Week" for older ones, with the dates under it. The new file `js/reports.js` holds the reports.
+
+**Why:** a Silver item: the total for each day and for the week. It answers "how much did I work this week, and on which days?"
+
+**Decisions:**
+
+- **The running timer counts,** the same as in today's total, and the report counts up with it while it is open.
+- **An entry counts for the day it started on,** as everywhere in the app, so each day's total here matches that day's heading in the list.
+- **The total is written at the end of every bar.** The bar shows how the days compare at a glance; the number is what you check against the list.
+
+**Decided against:**
+
+- A chart library. Seven bars are seven boxes with a width; a library would be bigger than the whole app.
+- Remembering which week you were looking at. The report opens on this week, which is what you want almost every time.
+
+**Checked:** with the sample data, this week's days matched the day headings in the list (Tuesday 8:02:00, Wednesday 2:29:00), and the week total is their sum. Last week shows only Thursday 15.10. (2:03:00). The week before shows Friday 09.10. (1:55:00). With the timer running, today's line and the week total counted up together. Checked on a wide window and a phone-sized one.

@@ -98,6 +98,8 @@ function updateClock() {
   navClock.textContent = formatDuration(elapsed);
   navClock.hidden = !runningSince;
   updateTodayTotal();
+  // The reports count the running timer too.
+  if (runningSince && currentPage() === 'reports') renderReports();
 }
 
 // Adds up today's entries, plus the running timer if it was started today.
@@ -146,6 +148,7 @@ function renderEntries() {
 
   entriesBody.replaceChildren(...rows);
   updateTagOptions();
+  renderReports();
   emptyMessage.hidden = entries.length > 0;
   entriesTable.hidden = entries.length === 0;
   updateTodayTotal();

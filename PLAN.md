@@ -72,6 +72,7 @@ The duration is not stored. It is always worked out from start and end, so the t
 | `js/time.js` | Working with time: durations, formatting, "is this today?" |
 | `js/storage.js` | Saving and loading data in the browser |
 | `js/pages.js` | Switching between the pages: Timer and Reports |
+| `js/reports.js` | The Reports page: the week, the tags, the export |
 | `js/app.js` | Connects the page to the logic: buttons, list, totals |
 | `fonts/` | The Rubik font and its license |
 

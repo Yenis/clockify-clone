@@ -130,6 +130,114 @@ select {
   font-weight: 600;
 }
 
+/* The Reports page */
+
+.report {
+  padding: 20px 24px 24px;
+  margin-bottom: 20px;
+}
+
+.report-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.report-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.report-range {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.week-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.button:disabled:hover {
+  border-color: var(--border);
+}
+
+.report-total {
+  margin: 18px 0 14px;
+  color: var(--muted);
+}
+
+.report-total strong {
+  display: block;
+  color: var(--text);
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* One line per day: name, bar, total */
+
+.week-days {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.week-day {
+  display: grid;
+  grid-template-columns: 110px 1fr 84px;
+  align-items: center;
+  gap: 14px;
+  padding: 7px 0;
+}
+
+.week-day-name {
+  white-space: nowrap;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.week-day.today .week-day-name {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.week-day-track {
+  height: 14px;
+  border-radius: 4px;
+  background: var(--surface-soft);
+}
+
+.week-day-bar {
+  display: block;
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  background: var(--primary);
+}
+
+.week-day-total {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Days still to come: no bar yet, and a lighter name */
+.week-day.future .week-day-name,
+.week-day.future .week-day-total {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
 .app {
   max-width: 1040px;
   margin: 28px auto;
@@ -653,6 +761,15 @@ select {
 
   .edit-label.edit-description {
     flex-basis: 100%;
+  }
+
+  .report {
+    padding: 16px;
+  }
+
+  .week-day {
+    grid-template-columns: 92px 1fr 72px;
+    gap: 10px;
   }
 }
 
