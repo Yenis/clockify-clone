@@ -115,6 +115,39 @@ One step, one commit. Each step is small enough to describe in one sentence, che
 | 27 | Export works on the phone | Export a CSV on the phone: it lands in Downloads |
 | | **Gold is done** | |
 
+## The phone app (Gold)
+
+Before building anything for the phone, the assignment asks two questions.
+
+**1. "If I had told you at the very start that this app must also work on my Android phone, what would you have planned differently?"**
+
+Less than you might think, because of one early decision: plain HTML, CSS and JavaScript, with the data in the browser's own storage and no server. That is exactly what an Android app can carry inside itself and show in a built-in browser window (a **WebView**). What we would have done differently:
+
+- **Designed for a phone screen first,** and then made it wider for the laptop. We added the phone layout later, in step 16.
+- **Kept the font inside the app from the start** (done in step 15). A phone app shouldn't need the internet to look right.
+- **Planned how the CSV export saves a file.** A browser saves downloads by itself. A WebView inside an app doesn't: the app has to save the file.
+- **Planned the Back button.** On Android, Back should go to the previous page of the app, and only leave the app from the first page.
+- **Said clearly where the data lives.** On the phone, the entries are kept inside the app, on that phone. They are separate from the entries in the laptop's browser, and nothing copies them from one to the other.
+
+**2. "The app is already built. What are my options for getting it onto my phone now, and what does each one cost me?"**
+
+| Option | What you get | What it costs |
+|---|---|---|
+| **Open it as a website on the phone** | The app in the phone's browser | It has to be put on a web server first (deploying, later in the course). It isn't an APK, so it isn't Gold. |
+| **An installable web app (PWA)** | An icon on the home screen, from the browser | It also needs a web server with HTTPS. Still not an APK file. |
+| **Capacitor** (a tool that wraps a web app in an Android project) | An APK, and ready-made extras for files, sharing and notifications | Node packages, Gradle and usually Android Studio: several gigabytes to install, and many files we didn't write. |
+| **A small Android app of our own around a WebView** | An APK with the web app inside it | One Java file, one manifest and a build script, built with the Android SDK's own command-line tools. We write the file saving and the Back button ourselves. Android only. |
+| **Rewrite it as a native app** (Kotlin, Flutter, React Native) | The most "phone-like" app | Weeks of work, and a second version of the app to keep in step with the first. |
+
+**Our choice: a small Android app of our own around a WebView.** The Android SDK and Java are already on this laptop, so nothing big has to be installed, and every file in the Android app is one we wrote and can read. The web app stays the only version of the app: the build script copies it into the Android app.
+
+| Decision | Choice | Why |
+|---|---|---|
+| Lowest Android version | Android 10 (API 29) | Saving a file to Downloads works the same way on every version from 10, without asking for storage permission. Almost every phone in use today has 10 or newer. |
+| App ID | `com.example.timetracker` | Fine for installing from an APK file. It must be changed to a name of our own before the app could go on Google Play. |
+| Signing | The Android debug key on this laptop | Android only installs signed APKs. A debug key is enough for our own phones; Google Play would need a release key. |
+| How it is built | `android/build-apk.sh`, with the SDK's `aapt2`, `javac`, `d8`, `zipalign` and `apksigner` | No Gradle and no Android Studio: one script you can read from top to bottom. |
+
 ## Rules for working
 
 - **Start every step with a clean `git status`**, and finish every step with a commit.

@@ -486,3 +486,25 @@ The heading of the week also says **Next week** now, for the week after this one
 **Checked:** clicked each link at the bottom: the right document opens, the tab's title changes, neither of the two links in the bar is marked, and "Back to the timer" goes back. Reloaded on `#terms`: still on the terms. Compared the text in the app with the two `.md` files: the same. Checked on a phone-sized window.
 
 **Silver is done.**
+
+---
+
+## Step 25: Plan the phone app
+
+**Date:** 2026-10-22
+
+**What:** `PLAN.md` has a new section, **The phone app (Gold)**, with the answers to the two questions from the assignment, the options for getting the app onto a phone and what each one costs, our choice, and four decisions for the Android app.
+
+**Why:** the assignment asks these two questions before building anything for the phone. Changing a plan is cheaper than changing an app.
+
+**Decisions:**
+
+- **A small Android app of our own around a WebView,** built with the Android SDK's command-line tools. The SDK and Java are already on this laptop, and every file is one we wrote.
+- **The web app stays the only version.** The Android build copies `index.html`, `styles.css`, `js/` and `fonts/` into the Android app every time, so a change to the app reaches the phone with the next build.
+
+**Decided against:**
+
+- Capacitor, Gradle and Android Studio. They would work, but they install several gigabytes and add many files we didn't write, for an app that needs one screen with a WebView.
+- The `.exe` path. Gold needs only one of the two, and the phone is where a time tracker is most useful.
+
+**Checked:** read the plan against section 6 of the GitHub assignment: both questions are answered, including where the data is kept.
