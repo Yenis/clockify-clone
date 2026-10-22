@@ -1,9 +1,15 @@
-// Switching between the pages of the app: Timer and Reports.
-// The page is part of the address (#timer, #reports), so it stays the same
+// Switching between the pages of the app: Timer, Reports, and the privacy policy
+// and terms of service.
+// The page is part of the address (#timer, #reports, #privacy, #terms), so it stays the same
 // after reloading, and the browser's Back button goes to the previous page.
 
-const PAGES = ['timer', 'reports'];
-const PAGE_TITLES = { timer: 'Time Tracker', reports: 'Reports · Time Tracker' };
+const PAGES = ['timer', 'reports', 'privacy', 'terms'];
+const PAGE_TITLES = {
+  timer: 'Time Tracker',
+  reports: 'Reports · Time Tracker',
+  privacy: 'Privacy policy · Time Tracker',
+  terms: 'Terms of service · Time Tracker',
+};
 
 // The page named in the address, or the timer when it names none we know.
 function currentPage() {

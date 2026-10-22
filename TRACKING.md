@@ -462,3 +462,27 @@ The heading of the week also says **Next week** now, for the week after this one
 - Adding promises the app can't keep yet, such as deleting all your data from a Settings page. Every sentence has to be true of the app as it is.
 
 **Checked:** read both files against the assignment and against the app: every sentence is true of the app today.
+
+---
+
+## Step 24: Both documents inside the app
+
+**Date:** 2026-10-22
+
+**What:** every page now ends with two links: **Privacy policy** and **Terms of service**. Each opens its document as a page of the app (`#privacy`, `#terms`), in a card with a link back to the timer. The text is the same as in `privacy-policy.md` and `terms-of-service.md`.
+
+**Why:** the last Silver item. People should be able to read what they agree to from inside the app.
+
+**Decisions:**
+
+- **The text is written into the page itself,** with a note in the page's code that it must stay the same as the `.md` file. A page opened from a file isn't allowed to read other files, so it can't load the `.md` files.
+- **The two documents are pages like Timer and Reports,** so the timer keeps running while you read, and Back returns to where you were.
+
+**Decided against:**
+
+- Links in the green bar. The documents are read once or twice, not every day, so they go at the bottom, where people look for them.
+- Turning the `.md` files into the page automatically. That needs a build step, and the app has none: it opens straight from `index.html`.
+
+**Checked:** clicked each link at the bottom: the right document opens, the tab's title changes, neither of the two links in the bar is marked, and "Back to the timer" goes back. Reloaded on `#terms`: still on the terms. Compared the text in the app with the two `.md` files: the same. Checked on a phone-sized window.
+
+**Silver is done.**
