@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The same colours as the web app: the mint of the logo and the dark green of the bar -->
+    <color name="icon_background">#BFE3CF</color>
+</resources>

@@ -508,3 +508,42 @@ The heading of the week also says **Next week** now, for the week after this one
 - The `.exe` path. Gold needs only one of the two, and the phone is where a time tracker is most useful.
 
 **Checked:** read the plan against section 6 of the GitHub assignment: both questions are answered, including where the data is kept.
+
+---
+
+## Step 26: An Android app around the web app
+
+**Date:** 2026-10-22
+
+**What:** a new folder, `android/`, with a small Android app of our own:
+
+| File | What it does |
+|---|---|
+| `AndroidManifest.xml` | Tells Android the app's ID (`com.example.timetracker`), its name, its icon, and which screen opens first. |
+| `src/com/example/timetracker/MainActivity.java` | The app's one screen: a **WebView** (a browser window without the browser around it) that shows the web app. It also handles the Back button and keeps the web app between the phone's status bar and navigation bar. |
+| `res/` | The app icon: the stopwatch from the logo, on mint. |
+| `build-apk.sh` | Builds `android/build/time-tracker.apk` in seven steps, each one printed as it runs. |
+
+`bash android/build-apk.sh` copies the web app (`index.html`, `styles.css`, `js/`, `fonts/`) into the Android app, compiles the Java file, packs everything into an APK and signs it. The APK is about 180 KB. `android/build/` is generated, so `.gitignore` already keeps it out of git.
+
+**Why:** Gold: the app on an Android phone, installed from an APK file. The plan in step 25 says why we chose this way.
+
+**Decisions:**
+
+- **The web app is copied in on every build,** never changed by hand inside `android/`. There is one version of the app.
+- **Back goes to the previous page of the app,** for example from Reports to Timer. On the first page it puts the app in the background, as Back does in other apps. Android 13 and newer handle Back differently from older versions, so the code does both.
+- **The status bar shows the dark green of the app's top bar.** Android 15 and newer always draw apps behind the status bar and the navigation bar, so the app makes room for both, and for the keyboard, itself.
+- **The phone keeps the entries inside the app** (`allowBackup="false"`): they aren't copied to a Google backup, as the privacy policy promises. Uninstalling the app deletes them.
+- **A debug build for looking inside:** `DEBUG=1 bash android/build-apk.sh` makes an APK that Chrome on the laptop can inspect (`chrome://inspect`) while the phone is connected. The normal build can't be inspected.
+- **Signed with the debug key** in `~/.android/debug.keystore`. The script creates it the first time. It never goes in the repository.
+
+**Decided against:**
+
+- Small shortcuts in the Java code (lambdas). They need extra build steps without Gradle, so the code spells each one out instead.
+- Asking for any permissions. The app needs none: no internet, no storage permission, nothing.
+
+**Not yet working on the phone:** **Download CSV** does nothing inside the app yet. A browser saves downloads by itself; an app has to save the file itself. That is the next step.
+
+**Checked:** on an Android 16 emulator (a Pixel 7): installed the APK and opened it from the app list. The app looks the same as in the browser, with the green status bar. Started a timer with a description and a tag, **force-stopped the app** (the same as the phone closing it), waited, and opened it again: the timer was still running, with the description, the tag and the full time. Loaded the sample data: the entries and the Reports page look right on the phone screen. Back from Reports went to Timer, and Back on Timer put the app in the background.
+
+**Not checked:** the on-screen keyboard. The emulator uses the laptop's keyboard instead of an on-screen one, so whether the keyboard covers a field has to be checked on a real phone.

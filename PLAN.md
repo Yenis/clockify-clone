@@ -76,6 +76,7 @@ The duration is not stored. It is always worked out from start and end, so the t
 | `js/app.js` | Connects the page to the logic: buttons, list, totals |
 | `fonts/` | The Rubik font and its license |
 | `privacy-policy.md`, `terms-of-service.md` | The privacy policy and terms of service |
+| `android/` | The Android app around the web app: `AndroidManifest.xml`, `src/` (the one screen, a WebView), `res/` (the icon) and `build-apk.sh` |
 
 ## Steps
 

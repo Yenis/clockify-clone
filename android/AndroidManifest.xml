@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- What Android needs to know about the app: its ID, name, icon, and which screen opens first. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.timetracker">
+
+    <!-- allowBackup="false": the entries stay on this phone and aren't copied anywhere,
+         as the privacy policy says. Uninstalling the app deletes them. -->
+    <application
+        android:label="Time Tracker"
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
