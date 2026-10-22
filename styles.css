@@ -231,6 +231,35 @@ select {
   font-variant-numeric: tabular-nums;
 }
 
+/* Tags can be longer than day names */
+.tag-totals {
+  margin-top: 14px;
+}
+
+.tag-totals .week-day {
+  grid-template-columns: minmax(110px, 200px) 1fr 84px;
+}
+
+.tag-totals .week-day-name {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+
+.tag-totals .untagged .week-day-name {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.tag-totals .untagged .week-day-bar {
+  background: var(--muted);
+}
+
+.report-empty {
+  margin: 14px 0 0;
+  color: var(--muted);
+}
+
 /* Days still to come: no bar yet, and a lighter name */
 .week-day.future .week-day-name,
 .week-day.future .week-day-total {
@@ -770,6 +799,10 @@ select {
   .week-day {
     grid-template-columns: 92px 1fr 72px;
     gap: 10px;
+  }
+
+  .tag-totals .week-day {
+    grid-template-columns: 110px 1fr 72px;
   }
 }
 

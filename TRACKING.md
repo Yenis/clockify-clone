@@ -392,3 +392,28 @@ Editing an entry now opens a small form across the whole row, with the name of e
 - Remembering which week you were looking at. The report opens on this week, which is what you want almost every time.
 
 **Checked:** with the sample data, this week's days matched the day headings in the list (Tuesday 8:02:00, Wednesday 2:29:00), and the week total is their sum. Last week shows only Thursday 15.10. (2:03:00). The week before shows Friday 09.10. (1:55:00). With the timer running, today's line and the week total counted up together. Checked on a wide window and a phone-sized one.
+
+---
+
+## Step 21: Total per tag
+
+**Date:** 2026-10-22
+
+**What:** under the week, the Reports page has a second card, **Time per tag**: each tag used in that week, with a bar and its total, the biggest first. Entries without a tag are added up last, as "(no tag)", with a grey bar. The card follows the week above it: move to last week, and the tags are last week's. A week without entries says so.
+
+The heading of the week also says **Next week** now, for the week after this one.
+
+**Why:** the second half of the Silver item on tags: the total time per tag. Step 18 added the tags.
+
+**Decisions:**
+
+- **The tags are counted for the week shown,** not for all time. One week is what you can check by hand against the list, and it is the same week as the card above.
+- **Tags that differ only in capital letters count as one,** the same as in the suggestions.
+- **The running timer counts under its tag,** as it does in the week's totals.
+
+**Decided against:**
+
+- A pie chart. Lengths of bars are easier to compare than slices, and the bars match the week above.
+- Leaving out entries without a tag. Then the tags wouldn't add up to the week total, which looks like a mistake.
+
+**Checked:** this week's "Bild-AI Workshop" total, 7:09:00, matches the entries by hand: 4:44 on Tuesday, 1:59 on Wednesday and 0:26 today. The tag totals together make the week total. Took the tag off one entry: it moved to "(no tag)", last. Next week: "No entries in this week." Checked on a phone-sized window: long tag names wrap and the totals stay aligned.

@@ -1,4 +1,4 @@
-// The Reports page: the total for each day of a week, and for the whole week.
+// The Reports page: the total for each day of a week, for the whole week, and for each tag.
 // Uses `entries` and `runningSince` from app.js.
 
 const weekTitle = document.getElementById('week-title');
@@ -8,6 +8,9 @@ const weekDays = document.getElementById('week-days');
 const previousWeekButton = document.getElementById('previous-week');
 const nextWeekButton = document.getElementById('next-week');
 const thisWeekButton = document.getElementById('this-week');
+const tagsRange = document.getElementById('tags-range');
+const tagsEmpty = document.getElementById('tags-empty');
+const tagTotals = document.getElementById('tag-totals');
 
 // The Monday of the week shown. The report opens on this week.
 let shownWeek = startOfWeek(new Date());
@@ -42,7 +45,8 @@ function renderReports() {
   const weekEnd = addDays(shownWeek, 7);
   const weeksBack = Math.round((thisWeek - shownWeek) / (7 * 24 * 3600 * 1000));
 
-  weekTitle.textContent = weeksBack === 0 ? 'This week' : weeksBack === 1 ? 'Last week' : 'Week';
+  const titles = { '-1': 'Next week', 0: 'This week', 1: 'Last week' };
+  weekTitle.textContent = titles[weeksBack] ?? 'Week';
   weekRange.textContent = `${formatShortDate(shownWeek)} \u2013 ${formatDate(addDays(weekEnd, -1))}`;
   thisWeekButton.disabled = weeksBack === 0;
 
@@ -56,18 +60,55 @@ function renderReports() {
   const longest = Math.max(...days.map((d) => d.total));
   weekTotal.textContent = formatDuration(days.reduce((sum, d) => sum + d.total, 0));
   weekDays.replaceChildren(...days.map(({ day, total }) => dayBar(day, total, longest)));
+
+  renderTagTotals(entriesBetween(shownWeek, weekEnd));
+  tagsRange.textContent = `${weekTitle.textContent}, ${weekRange.textContent}`;
+}
+
+// The total for each tag in the week shown, the biggest first, and entries without a tag last.
+// Tags that differ only in capital letters count as one, as in the suggestions.
+function renderTagTotals(weekEntries) {
+  const totals = new Map();
+  let untagged = 0;
+  for (const entry of weekEntries) {
+    if (!entry.tag) {
+      untagged += durationOf(entry);
+      continue;
+    }
+    const key = entry.tag.toLowerCase();
+    const current = totals.get(key) ?? { tag: entry.tag, total: 0 };
+    current.total += durationOf(entry);
+    totals.set(key, current);
+  }
+
+  const rows = [...totals.values()].sort((a, b) => b.total - a.total);
+  if (untagged > 0) rows.push({ tag: '(no tag)', total: untagged, untagged: true });
+
+  const longest = Math.max(0, ...rows.map((r) => r.total));
+  tagTotals.replaceChildren(...rows.map((row) => {
+    const item = barLine(row.tag, row.total, longest);
+    if (row.untagged) item.classList.add('untagged');
+    return item;
+  }));
+  tagsEmpty.hidden = rows.length > 0;
 }
 
 // One day of the week: its name, a bar as long as its share of the longest day, and its total.
 function dayBar(day, total, longest) {
-  const item = document.createElement('li');
-  item.className = 'week-day';
+  const item = barLine(`${WEEKDAYS[day.getDay()].slice(0, 3)} ${formatShortDate(day)}`, total, longest);
   if (isToday(day)) item.classList.add('today');
   if (day > new Date()) item.classList.add('future');
+  return item;
+}
+
+// One line of a report: a name, a bar as long as its share of the longest line, and its total.
+function barLine(label, total, longest) {
+  const item = document.createElement('li');
+  item.className = 'week-day';
 
   const name = document.createElement('span');
   name.className = 'week-day-name';
-  name.textContent = `${WEEKDAYS[day.getDay()].slice(0, 3)} ${formatShortDate(day)}`;
+  name.textContent = label;
 
   const track = document.createElement('span');
   track.className = 'week-day-track';
