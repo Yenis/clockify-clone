@@ -314,7 +314,6 @@ select {
   overflow: hidden;
 }
 
-.entries-table th,
 .entries-table td {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
@@ -325,27 +324,37 @@ select {
   border-bottom: none;
 }
 
-.entries-table th {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-  text-transform: uppercase;
+/* The heading above each day's entries */
+
+.entries-table tr.day-row td {
+  padding: 10px 16px;
   background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 14px;
 }
 
-.entries-table th:first-child {
-  width: 36%;
+.day-row .day-name {
+  font-weight: 600;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+}
+
+.day-row .day-total {
+  float: right;
+  font-weight: 600;
+  color: var(--primary-dark);
+  font-variant-numeric: tabular-nums;
 }
 
 .entries-table td.description {
+  width: 60%;
   font-weight: 500;
   overflow-wrap: anywhere;
 }
 
-.entries-table td.start,
-.entries-table td.end,
-.entries-table td.date {
+.entries-table td.times {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -370,13 +379,43 @@ select {
   text-align: right;
 }
 
-.entries-table .actions .button + .button {
+.entries-table .actions .button + .button,
+.edit-buttons .button + .button {
   margin-left: 6px;
 }
 
-.entries-table tr.editing td,
-.entries-table tr.edit-message td {
+/* Editing an entry: a small form across the whole row */
+
+.entries-table tr.editing td {
   background: var(--primary-soft);
+}
+
+.edit-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 12px;
+}
+
+.edit-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.edit-label.edit-description {
+  flex: 1;
+  min-width: 200px;
+}
+
+.edit-form .duration {
+  padding: 8px 4px;
+}
+
+.edit-buttons {
+  margin-left: auto;
 }
 
 .edit-field {
@@ -414,10 +453,6 @@ select {
   background: var(--danger-soft);
 }
 
-.entries-table tr.edit-message td {
-  padding-top: 0;
-}
-
 /* A phone-sized screen: everything in one column, and each entry as a small card */
 
 @media (max-width: 640px) {
@@ -450,20 +485,17 @@ select {
     flex-basis: 100%;
   }
 
-  .entries-table thead {
-    display: none;
-  }
-
+  /* Each entry: description and duration on top, times and buttons underneath */
   .entries-table,
   .entries-table tbody {
     display: block;
   }
 
-  .entries-table tr {
+  .entries-table tr.entry-row {
     display: grid;
-    grid-template-columns: auto auto 1fr auto;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    gap: 4px 6px;
+    gap: 4px 12px;
     padding: 12px 14px;
     border-bottom: 1px solid var(--border);
   }
@@ -472,67 +504,38 @@ select {
     border-bottom: none;
   }
 
-  .entries-table td,
-  .entries-table th {
+  .entries-table tr.entry-row td {
+    width: auto;
     padding: 0;
     border: none;
   }
 
-  .entries-table td.description {
-    grid-column: 1 / 4;
+  .entries-table tr.entry-row {
+    grid-template-areas:
+      "description duration"
+      "times actions";
   }
 
-  .entries-table td.duration {
-    grid-column: 4;
-    grid-row: 1;
-  }
+  .entries-table tr.entry-row .description { grid-area: description; }
+  .entries-table tr.entry-row .duration { grid-area: duration; }
+  .entries-table tr.entry-row .times { grid-area: times; }
+  .entries-table tr.entry-row .actions { grid-area: actions; }
 
-  .entries-table td.end::before {
-    content: "\2013\00a0";
-  }
-
-  .entries-table td.actions {
-    width: auto;
-    grid-column: 4;
-  }
-
-  /* While editing, the fields go under each other, each with its name above it */
+  .entries-table tr.day-row,
   .entries-table tr.editing {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    background: var(--primary-soft);
+    display: block;
   }
 
+  .entries-table tr.day-row td,
   .entries-table tr.editing td {
-    grid-column: auto;
-    grid-row: auto;
-    text-align: left;
-  }
-
-  .entries-table tr.editing td[data-label]::before {
-    content: attr(data-label);
     display: block;
-    margin-bottom: 4px;
-    font-size: 13px;
-    color: var(--muted);
   }
 
-  .entries-table tr.editing td.description,
-  .entries-table tr.editing td.actions {
-    grid-column: 1 / -1;
+  .edit-label {
+    flex: 1 1 40%;
   }
 
-  .entries-table tr.editing td.end::before {
-    content: attr(data-label);
-  }
-
-  .entries-table tr.edit-message {
-    display: block;
-    padding: 0 14px 12px;
-    background: var(--primary-soft);
-  }
-
-  .entries-table tr.edit-message td {
-    display: block;
+  .edit-label.edit-description {
+    flex-basis: 100%;
   }
 }

@@ -80,6 +80,9 @@ function updateTodayTotal() {
     total += Date.now() - runningSince.getTime();
   }
   todayTotal.textContent = formatDuration(total);
+  // Today's heading in the list shows the same total.
+  const todayHeadingTotal = entriesBody.querySelector('[data-today-total]');
+  if (todayHeadingTotal) todayHeadingTotal.textContent = formatDuration(total);
 }
 
 function updateTimerBar() {
@@ -90,14 +93,58 @@ function updateTimerBar() {
   updateClock();
 }
 
-// Shows the entries in the table, newest first.
+// The number of columns in the list: description, times, duration, buttons.
+const COLUMNS = 4;
+
+// Shows the entries in the table, newest first, under a heading for each day.
+// An entry belongs to the day it started on.
 function renderEntries() {
   const newestFirst = [...entries].sort((a, b) => b.start.localeCompare(a.start));
 
-  entriesBody.replaceChildren(...newestFirst.map(entryRow));
+  const rows = [];
+  let day = null;
+  for (const entry of newestFirst) {
+    const entryDay = toDateFieldValue(new Date(entry.start));
+    if (entryDay !== day) {
+      day = entryDay;
+      rows.push(dayRow(new Date(entry.start), newestFirst));
+    }
+    rows.push(entryRow(entry));
+  }
+
+  entriesBody.replaceChildren(...rows);
   emptyMessage.hidden = entries.length > 0;
   entriesTable.hidden = entries.length === 0;
   updateTodayTotal();
+}
+
+// The heading above a day's entries: the day's name and its total.
+function dayRow(date, allEntries) {
+  const dayKey = toDateFieldValue(date);
+  let total = 0;
+  for (const entry of allEntries) {
+    const start = new Date(entry.start);
+    if (toDateFieldValue(start) === dayKey) total += new Date(entry.end) - start;
+  }
+
+  const name = document.createElement('span');
+  name.className = 'day-name';
+  name.textContent = formatDayHeading(date);
+
+  const totalText = document.createElement('span');
+  totalText.className = 'day-total';
+  totalText.textContent = formatDuration(total);
+  // Today's total also counts the running timer, so it is kept up to date every second.
+  if (isToday(date)) totalText.dataset.todayTotal = '';
+
+  const td = cell('');
+  td.colSpan = COLUMNS;
+  td.append(name, totalText);
+
+  const row = document.createElement('tr');
+  row.className = 'day-row';
+  row.append(td);
+  return row;
 }
 
 function entryRow(entry) {
@@ -107,11 +154,10 @@ function entryRow(entry) {
   const end = new Date(entry.end);
 
   const row = document.createElement('tr');
+  row.className = 'entry-row';
   row.append(
     cell(entry.description || '(no description)', entry.description ? 'description' : 'description muted'),
-    cell(formatDate(start), 'date'),
-    cell(formatTime(start), 'start'),
-    cell(formatTime(end), 'end'),
+    cell(`${formatTime(start)} \u2013 ${formatTime(end)}`, 'times'),
     cell(formatDuration(end - start), 'duration'),
     actionsCell(entry),
   );
@@ -139,44 +185,62 @@ function actionButton(label, action, id, extraClass = '') {
   return button;
 }
 
-// The same row, with fields instead of text, and Save and Cancel buttons.
+// The same entry as a small form across the whole row: fields with their names,
+// the duration, Save and Cancel, and a place for a message about wrong input.
 function editRow(entry) {
   const start = new Date(entry.start);
   const end = new Date(entry.end);
 
-  const row = document.createElement('tr');
-  row.className = 'editing';
-  row.dataset.id = entry.id;
-  row.append(
-    fieldCell('text', 'description', entry.description, 'Description'),
-    fieldCell('date', 'date', toDateFieldValue(start), 'Date'),
-    fieldCell('time', 'start', formatTime(start), 'Start'),
-    fieldCell('time', 'end', formatTime(end), 'End'),
-    cell(formatDuration(end - start), 'duration'),
-  );
+  const duration = document.createElement('span');
+  duration.className = 'duration';
+  duration.textContent = formatDuration(end - start);
 
-  const actions = cell('', 'actions');
-  actions.append(
+  const buttons = document.createElement('div');
+  buttons.className = 'edit-buttons';
+  buttons.append(
     actionButton('Save', 'save', entry.id, 'button-primary'),
     actionButton('Cancel', 'cancel', entry.id),
   );
-  row.append(actions);
+
+  const message = document.createElement('p');
+  message.className = 'form-error';
+  message.setAttribute('role', 'alert');
+  message.hidden = true;
+
+  const form = document.createElement('div');
+  form.className = 'edit-form';
+  form.append(
+    editField('text', 'description', entry.description, 'Description'),
+    editField('date', 'date', toDateFieldValue(start), 'Date'),
+    editField('time', 'start', formatTime(start), 'Start'),
+    editField('time', 'end', formatTime(end), 'End'),
+    duration,
+    buttons,
+    message,
+  );
+
+  const td = cell('');
+  td.colSpan = COLUMNS;
+  td.append(form);
+
+  const row = document.createElement('tr');
+  row.className = 'editing';
+  row.dataset.id = entry.id;
+  row.append(td);
   return row;
 }
 
-function fieldCell(type, field, value, label) {
+function editField(type, field, value, label) {
   const input = document.createElement('input');
   input.type = type;
   input.className = 'edit-field';
   input.value = value;
   input.dataset.field = field;
-  input.setAttribute('aria-label', label);
 
-  // On a phone-sized screen the column headings are hidden, so each field shows its name.
-  const td = cell('', field);
-  td.dataset.label = label;
-  td.append(input);
-  return td;
+  const wrapper = document.createElement('label');
+  wrapper.className = `edit-label edit-${field}`;
+  wrapper.append(label, input);
+  return wrapper;
 }
 
 function startEditing(id) {
@@ -264,31 +328,19 @@ function clearManualProblem() {
   manualError.hidden = true;
 }
 
-// While editing, the message goes in a row of its own, right under the row being edited.
+// While editing, the message goes under the fields, inside the row being edited.
 function showEditProblem(row, problem) {
   markProblemField(row, problem);
-
-  let messageRow = row.nextElementSibling;
-  if (!messageRow || !messageRow.classList.contains('edit-message')) {
-    messageRow = document.createElement('tr');
-    messageRow.className = 'edit-message';
-    const td = document.createElement('td');
-    td.colSpan = row.cells.length;
-    const message = document.createElement('p');
-    message.className = 'form-error';
-    message.setAttribute('role', 'alert');
-    td.append(message);
-    messageRow.append(td);
-    row.after(messageRow);
-  }
-  messageRow.querySelector('.form-error').textContent = problem.message;
+  const message = row.querySelector('.form-error');
+  message.textContent = problem.message;
+  message.hidden = false;
 }
 
 function clearEditProblem() {
   const row = entriesBody.querySelector('tr.editing');
   if (!row) return;
   unmarkProblemFields(row);
-  if (row.nextElementSibling?.classList.contains('edit-message')) row.nextElementSibling.remove();
+  row.querySelector('.form-error').hidden = true;
 }
 
 function addManualEntry() {

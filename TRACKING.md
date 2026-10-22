@@ -301,3 +301,27 @@ On a phone-sized screen everything goes into one column: the clock and Stop shar
 - Changing what the app does. This step changes only how it looks, so if something breaks, we know it's the look.
 
 **Checked:** with seven entries over three days and a running timer, on a wide window and on a phone-sized one (390 pixels wide): the timer, the form, the list, an entry being edited and an entry without a description all look right, and nothing overflows. Start, Stop, Edit, Save and Delete still work as before.
+
+---
+
+## Step 17: Entries grouped by day, with a total for each day
+
+**Date:** 2026-10-22
+
+**What:** the list now has a heading for each day, newest day first: **Today**, **Yesterday**, then for example **Monday, 19.10.2026**, with that day's total on the right. Under each heading are that day's entries, newest first. Each entry shows its description, its start and end as one range (`08:20 – 08:45`), its duration, and Edit and Delete. The date column and the column headings are gone: the day heading says the date.
+
+Editing an entry now opens a small form across the whole row, with the name of each field above it: description, date, start, end, the duration, and Save and Cancel. A message about wrong input appears under the fields, inside the same row.
+
+**Why:** with two weeks of entries, one long table is hard to read. Clockify groups by day too, and a total for each day answers "how much did I work on Tuesday?" at a glance. It is also a first step towards the week report in Silver.
+
+**Decisions:**
+
+- **Today's heading shows the same total as the Today label at the top,** running timer included, and counts up with it.
+- **An entry belongs to the day it started on,** the same rule as today's total.
+
+**Decided against:**
+
+- Keeping the column headings. With a heading for each day they repeated themselves, and on a phone they were already hidden.
+- A separate row for the message under an entry being edited. It is simpler inside the edit form, and it can't end up under the wrong row.
+
+**Checked:** with 23 entries over six days (from the sample data) and a running timer: each day has its heading and the right total, and today's heading and the Today label count up together. Edited an entry with an end before its start: the message appeared under the fields and nothing was saved. Checked on a wide window and on a phone-sized one.

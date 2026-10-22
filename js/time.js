@@ -24,6 +24,17 @@ function formatDate(date) {
   return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`;
 }
 
+const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+// The heading for a day in the list: "Today", "Yesterday", or for example "Monday, 19.10.2026".
+function formatDayHeading(date) {
+  if (isToday(date)) return 'Today';
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (toDateFieldValue(date) === toDateFieldValue(yesterday)) return 'Yesterday';
+  return `${WEEKDAYS[date.getDay()]}, ${formatDate(date)}`;
+}
+
 // True when the date falls on today's date, in local time.
 function isToday(date) {
   const now = new Date();
