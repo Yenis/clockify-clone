@@ -198,7 +198,12 @@ function buildCsv(exported, separator) {
 }
 
 // Hands a file to the browser, which saves it in Downloads.
+// In the Android app there is no browser to do that: the app saves it (android/.../FileSaver.java).
 function downloadFile(name, text, type) {
+  if (window.AndroidFiles) {
+    window.AndroidFiles.saveText(name, text, type.split(';')[0]);
+    return;
+  }
   const url = URL.createObjectURL(new Blob([text], { type }));
   const link = document.createElement('a');
   link.href = url;

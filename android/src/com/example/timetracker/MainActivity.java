@@ -1,13 +1,16 @@
 package com.example.timetracker;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.Insets;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowInsets;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -20,6 +23,8 @@ import android.window.OnBackInvokedDispatcher;
 public class MainActivity extends Activity {
     // The dark green of the bar at the top of the web app, behind the phone's status bar.
     private static final int FOREST = Color.rgb(0x16, 0x38, 0x2a);
+    // Where the build script puts the web app inside the APK.
+    private static final String APP_ADDRESS = "file:///android_asset/www/";
 
     private WebView webView;
 
@@ -38,8 +43,19 @@ public class MainActivity extends Activity {
         settings.setJavaScriptEnabled(true);
         // The web app keeps its entries in the browser's storage (localStorage).
         settings.setDomStorageEnabled(true);
-        // Links open inside the app, not in the phone's browser.
-        webView.setWebViewClient(new WebViewClient());
+        // The web app's own pages open inside the app. Anything else, such as a link to a
+        // website, opens in the phone's browser, so no other page can use FileSaver.
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                Uri address = request.getUrl();
+                if (address.toString().startsWith(APP_ADDRESS)) return false;
+                startActivity(new Intent(Intent.ACTION_VIEW, address));
+                return true;
+            }
+        });
+        // The CSV export saves its file through this.
+        webView.addJavascriptInterface(new FileSaver(this), "AndroidFiles");
 
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(FOREST);
@@ -50,7 +66,7 @@ public class MainActivity extends Activity {
         if (savedInstanceState != null) {
             webView.restoreState(savedInstanceState);
         } else {
-            webView.loadUrl("file:///android_asset/www/index.html");
+            webView.loadUrl(APP_ADDRESS + "index.html");
         }
 
         if (Build.VERSION.SDK_INT >= 33) handleBackOnNewerAndroid();

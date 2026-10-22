@@ -547,3 +547,29 @@ The heading of the week also says **Next week** now, for the week after this one
 **Checked:** on an Android 16 emulator (a Pixel 7): installed the APK and opened it from the app list. The app looks the same as in the browser, with the green status bar. Started a timer with a description and a tag, **force-stopped the app** (the same as the phone closing it), waited, and opened it again: the timer was still running, with the description, the tag and the full time. Loaded the sample data: the entries and the Reports page look right on the phone screen. Back from Reports went to Timer, and Back on Timer put the app in the background.
 
 **Not checked:** the on-screen keyboard. The emulator uses the laptop's keyboard instead of an on-screen one, so whether the keyboard covers a field has to be checked on a real phone.
+
+---
+
+## Step 27: Export works on the phone
+
+**Date:** 2026-10-22
+
+**What:** **Download CSV** now works inside the Android app. The file goes to the phone's **Downloads** folder, and a short message at the bottom of the screen says it was saved and under which name. If a file with that name is already there, Android adds a number, such as `(1)`, instead of replacing it, and the message shows that name.
+
+A new file, `android/src/com/example/timetracker/FileSaver.java`, does the saving. The web app reaches it as `AndroidFiles`. In `js/reports.js`, `downloadFile` uses it when it is there, and the browser's own download everywhere else.
+
+**Why:** in a browser, the browser saves downloads. A WebView inside an app doesn't, so before this step the button did nothing on the phone. This was the last thing in the app that worked in the browser and not on the phone.
+
+**Decisions:**
+
+- **No storage permission.** From Android 10, an app can add files to Downloads without asking, which is why the app needs Android 10 or newer (step 25).
+- **Only the app's own pages open inside the app.** A link to anything else opens in the phone's browser. `AndroidFiles` lets a page save files, so no page from the internet should ever get it.
+
+**Decided against:**
+
+- Android's "share" sheet (send the file to an app). It is one more step every time, and Downloads is where people look for an exported file.
+- Showing a "save as" dialog to pick a folder. It needs more code, and the Silver check only asks for a file that opens in Excel or Google Sheets.
+
+**Checked:** on the Android 16 emulator: exported 15–22 October. The file is in Downloads, with 21 entries, the semicolons, the decimal comma and the UTF-8 mark, the same as from the browser. Exported again twice: the files are `(1)` and `(2)`, nothing was replaced, and the message named each file. In the browser on the laptop, Download CSV still saves through the browser.
+
+**Gold is done.**
