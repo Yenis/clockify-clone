@@ -9,6 +9,15 @@
   --danger: #e53935;
 }
 
+/* The font is kept inside the app, so the text looks the same without internet.
+   Rubik, SIL Open Font License: see fonts/OFL-Rubik.txt. */
+@font-face {
+  font-family: "Rubik";
+  src: url("fonts/Rubik-VF.ttf") format("truetype");
+  font-weight: 300 900;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -17,7 +26,7 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "Rubik", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 16px;
 }
 

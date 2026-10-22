@@ -264,3 +264,20 @@ The messages say exactly what to fix:
 **Why:** the repository will be public on GitHub, and a push sends every committed file in every commit. `.gitignore` only protects files that were never committed, so it goes in before the first push.
 
 **Checked:** `git ls-files` lists only the app's own files and the two documents: no secrets, packages or generated files were ever committed. `git status` shows `.gitignore` as the only new file.
+
+---
+
+## Step 15: Keep the font inside the app
+
+**Date:** 2026-10-22
+
+**What:** added the **Rubik** font to a new `fonts/` folder, with its license, and the app now uses it for all its text.
+
+**Why:** the next step gives the app a new look, built around this font. The font file is part of the app, not loaded from the internet, so the app looks the same offline, and the phone app (Gold) will need no internet at all.
+
+**Decided against:**
+
+- Loading the font from Google Fonts. Without internet, the browser would quietly fall back to another font.
+- The font's separate files for each weight. Rubik comes as one "variable" file that has every weight from light to black.
+
+**Checked:** opened `index.html` straight from the file: the browser reports Rubik as loaded, and the text is in Rubik. Rubik's license (SIL Open Font License) allows shipping it inside an app, as long as the license file goes with it.
