@@ -135,6 +135,37 @@ select {
   color: var(--primary-dark);
 }
 
+.timer-tag {
+  width: 170px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--surface-soft);
+  outline: none;
+}
+
+.timer-tag:focus {
+  border-color: var(--primary);
+  background: var(--surface);
+}
+
+/* A tag next to a description */
+.tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 500;
+  font-style: normal;
+  white-space: nowrap;
+  vertical-align: 1px;
+}
+
 /* Adding an entry by hand */
 
 .manual-entry {
@@ -466,7 +497,8 @@ select {
     padding: 12px 12px 12px 18px;
   }
 
-  .timer-description {
+  .timer-description,
+  .timer-tag {
     flex-basis: 100%;
   }
 

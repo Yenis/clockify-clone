@@ -325,3 +325,26 @@ Editing an entry now opens a small form across the whole row, with the name of e
 - A separate row for the message under an entry being edited. It is simpler inside the edit form, and it can't end up under the wrong row.
 
 **Checked:** with 23 entries over six days (from the sample data) and a running timer: each day has its heading and the right total, and today's heading and the Today label count up together. Edited an entry with an end before its start: the message appeared under the fields and nothing was saved. Checked on a wide window and on a phone-sized one.
+
+---
+
+## Step 18: Tags
+
+**Date:** 2026-10-22
+
+**What:** an entry can have a **tag**, for example "Client work" or "Learning". There is a tag field next to the description in the timer, in the form for adding by hand, and in the edit form. Each field suggests the tags you have used before as you type. The tag shows as a small green label next to the description in the list. A running timer remembers its tag when the app is closed, like its description.
+
+**Why:** the first Silver item: tags, and the total time per tag. This step adds the tags; the totals come with the reports in step 21.
+
+**Decisions:**
+
+- **One tag per entry, typed freely.** Most people use one tag per entry, and typing a new one is the quickest way to create it. The suggestions keep the spelling the same.
+- **Tags are tidied when saved:** extra spaces are removed, so "Client  work " and "Client work" are the same tag. Two tags that differ only in capital letters are suggested once.
+- **Entries saved before tags existed get an empty tag** when they are loaded. Nothing is lost, and nothing has to be converted by hand.
+
+**Decided against:**
+
+- A separate page for managing tags (renaming, colours). Not needed for the Silver check, and an entry's tag can be changed by editing it.
+- Several tags per entry. It would make the total per tag harder to check by hand: an entry with two tags would count twice.
+
+**Checked:** stopped a timer with the tag "  Clockify   app ": saved as "Clockify app". Added an entry by hand with a tag, and changed an entry's tag by editing it: both show in the list and are still there after reloading. Started a timer with a tag and reloaded: the tag was back in its field. The suggestions list every tag once, in alphabetical order. Checked the timer and the list on a phone-sized window.

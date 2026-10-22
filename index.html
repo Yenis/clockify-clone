@@ -27,6 +27,8 @@
     <section id="timer-bar" class="timer-bar card" aria-label="Timer">
       <input id="description" class="timer-description" type="text"
              placeholder="What are you working on?" autocomplete="off">
+      <input id="tag" class="timer-tag" type="text" list="tag-options"
+             placeholder="Tag" aria-label="Tag" autocomplete="off">
       <span id="clock" class="timer-clock">0:00:00</span>
       <button id="start-stop" class="button button-primary" type="button">Start</button>
     </section>
@@ -38,6 +40,11 @@
           Description
           <input name="description" data-field="description" type="text" class="edit-field" autocomplete="off"
                  placeholder="What did you work on?">
+        </label>
+        <label class="manual-tag">
+          Tag
+          <input name="tag" data-field="tag" type="text" class="edit-field" list="tag-options"
+                 autocomplete="off" placeholder="Optional">
         </label>
         <label>
           Date
@@ -67,6 +74,9 @@
       </table>
     </section>
   </main>
+
+  <!-- Suggestions for every tag field: the tags used so far -->
+  <datalist id="tag-options"></datalist>
 
   <script src="js/time.js"></script>
   <script src="js/storage.js"></script>

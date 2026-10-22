@@ -49,12 +49,13 @@ The tiers moved up in the GitHub assignment: everything that was Silver or Gold 
 
 ## How an entry is stored
 
-Each entry has four things:
+Each entry has five things:
 
 | Field | Example | Meaning |
 |---|---|---|
 | `id` | `k3x9a2` | A unique name, so we can find the entry to edit or delete it |
 | `description` | `Writing the plan` | What you worked on |
+| `tag` | `Client work` | One tag, or empty text for no tag (from step 18) |
 | `start` | `2026-10-15T07:00:00.000Z` | When you started |
 | `end` | `2026-10-15T08:30:00.000Z` | When you stopped |
 

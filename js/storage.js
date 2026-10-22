@@ -12,7 +12,13 @@ function loadEntries() {
     if (!saved) return [];
 
     const entries = JSON.parse(saved);
-    return Array.isArray(entries) ? entries.filter(isValidEntry) : [];
+    if (!Array.isArray(entries)) return [];
+    // Entries saved before tags existed get an empty tag.
+    return entries.filter(isValidEntry).map((entry) => ({
+      ...entry,
+      description: String(entry.description ?? ''),
+      tag: typeof entry.tag === 'string' ? entry.tag : '',
+    }));
   } catch (error) {
     console.error('The saved entries could not be read.', error);
     return [];
@@ -37,7 +43,7 @@ function isValidEntry(entry) {
     && typeof entry.end === 'string';
 }
 
-// Returns the running timer as { start, description }, or null if none is running.
+// Returns the running timer as { start, description, tag }, or null if none is running.
 function loadRunning() {
   try {
     const running = JSON.parse(localStorage.getItem(RUNNING_KEY));
@@ -46,7 +52,11 @@ function loadRunning() {
       && typeof running.start === 'string'
       && !Number.isNaN(Date.parse(running.start));
     if (!valid) return null;
-    return { start: running.start, description: String(running.description ?? '') };
+    return {
+      start: running.start,
+      description: String(running.description ?? ''),
+      tag: String(running.tag ?? ''),
+    };
   } catch (error) {
     console.error('The running timer could not be read.', error);
     return null;

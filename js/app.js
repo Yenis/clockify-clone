@@ -1,6 +1,8 @@
 // Connects the page to the logic: buttons, clock, list of entries.
 
 const descriptionInput = document.getElementById('description');
+const tagInput = document.getElementById('tag');
+const tagOptions = document.getElementById('tag-options');
 const clock = document.getElementById('clock');
 const startStopButton = document.getElementById('start-stop');
 const timerBar = document.getElementById('timer-bar');
@@ -11,7 +13,7 @@ const todayTotal = document.getElementById('today-total');
 const manualForm = document.getElementById('manual-form');
 const manualError = document.getElementById('manual-error');
 
-// All finished entries: { id, description, start, end }.
+// All finished entries: { id, description, tag, start, end }. An entry without a tag has tag ''.
 // start and end are stored as ISO text, for example "2026-10-15T07:00:00.000Z".
 let entries = loadEntries();
 
@@ -35,6 +37,7 @@ function stopTimer() {
   entries.push({
     id: newId(),
     description: descriptionInput.value.trim(),
+    tag: cleanTag(tagInput.value),
     start: runningSince.toISOString(),
     end: new Date().toISOString(),
   });
@@ -43,6 +46,7 @@ function stopTimer() {
   saveEntries(entries);
   saveRunning(null);
   descriptionInput.value = '';
+  tagInput.value = '';
 
   clearInterval(clockTicker);
   clockTicker = null;
@@ -52,7 +56,31 @@ function stopTimer() {
 }
 
 function saveRunningTimer() {
-  saveRunning({ start: runningSince.toISOString(), description: descriptionInput.value });
+  saveRunning({ start: runningSince.toISOString(), description: descriptionInput.value, tag: tagInput.value });
+}
+
+// A tag without extra spaces: "  Client   work " becomes "Client work".
+function cleanTag(text) {
+  return text.trim().replace(/\s+/g, ' ');
+}
+
+// Every tag used so far, each once, in alphabetical order.
+// Two tags that differ only in capital letters count as one, spelled as first used.
+function allTags() {
+  const tags = new Map();
+  for (const entry of entries) {
+    if (entry.tag && !tags.has(entry.tag.toLowerCase())) tags.set(entry.tag.toLowerCase(), entry.tag);
+  }
+  return [...tags.values()].sort((a, b) => a.localeCompare(b));
+}
+
+// The suggestions shown under every tag field.
+function updateTagOptions() {
+  tagOptions.replaceChildren(...allTags().map((tag) => {
+    const option = document.createElement('option');
+    option.value = tag;
+    return option;
+  }));
 }
 
 // A short unique name for an entry, for example "mgq3k1x7a9".
@@ -113,6 +141,7 @@ function renderEntries() {
   }
 
   entriesBody.replaceChildren(...rows);
+  updateTagOptions();
   emptyMessage.hidden = entries.length > 0;
   entriesTable.hidden = entries.length === 0;
   updateTodayTotal();
@@ -156,12 +185,24 @@ function entryRow(entry) {
   const row = document.createElement('tr');
   row.className = 'entry-row';
   row.append(
-    cell(entry.description || '(no description)', entry.description ? 'description' : 'description muted'),
+    descriptionCell(entry),
     cell(`${formatTime(start)} \u2013 ${formatTime(end)}`, 'times'),
     cell(formatDuration(end - start), 'duration'),
     actionsCell(entry),
   );
   return row;
+}
+
+// The description, with the tag next to it.
+function descriptionCell(entry) {
+  const td = cell(entry.description || '(no description)', entry.description ? 'description' : 'description muted');
+  if (entry.tag) {
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = entry.tag;
+    td.append(' ', tag);
+  }
+  return td;
 }
 
 // The buttons at the end of each row. They carry the entry's id,
@@ -211,6 +252,7 @@ function editRow(entry) {
   form.className = 'edit-form';
   form.append(
     editField('text', 'description', entry.description, 'Description'),
+    editField('text', 'tag', entry.tag, 'Tag'),
     editField('date', 'date', toDateFieldValue(start), 'Date'),
     editField('time', 'start', formatTime(start), 'Start'),
     editField('time', 'end', formatTime(end), 'End'),
@@ -236,6 +278,10 @@ function editField(type, field, value, label) {
   input.className = 'edit-field';
   input.value = value;
   input.dataset.field = field;
+  if (field === 'tag') {
+    input.setAttribute('list', 'tag-options');
+    input.autocomplete = 'off';
+  }
 
   const wrapper = document.createElement('label');
   wrapper.className = `edit-label edit-${field}`;
@@ -282,6 +328,7 @@ function saveEdit(id) {
   }
 
   entry.description = field('description').trim();
+  entry.tag = cleanTag(field('tag'));
   entry.start = start.toISOString();
   entry.end = end.toISOString();
   saveEntries(entries);
@@ -359,6 +406,7 @@ function addManualEntry() {
   entries.push({
     id: newId(),
     description: fields.description.value.trim(),
+    tag: cleanTag(fields.tag.value),
     start: start.toISOString(),
     end: end.toISOString(),
   });
@@ -367,6 +415,7 @@ function addManualEntry() {
 
   // Ready for the next one: the date stays, the rest is cleared.
   fields.description.value = '';
+  fields.tag.value = '';
   fields.start.value = '';
   fields.end.value = '';
   fields.description.focus();
@@ -429,7 +478,10 @@ manualForm.addEventListener('submit', (event) => {
 manualForm.addEventListener('input', clearManualProblem);
 entriesBody.addEventListener('input', clearEditProblem);
 
-// Remember the description of a running timer while you type it.
+// Remember the description and tag of a running timer while you type them.
+tagInput.addEventListener('input', () => {
+  if (runningSince) saveRunningTimer();
+});
 descriptionInput.addEventListener('input', () => {
   if (runningSince) saveRunningTimer();
 });
@@ -441,5 +493,6 @@ manualForm.elements.date.value = toDateFieldValue(new Date());
 const timerLeftRunning = loadRunning();
 if (timerLeftRunning) {
   descriptionInput.value = timerLeftRunning.description;
+  tagInput.value = timerLeftRunning.tag;
   startTimer(new Date(timerLeftRunning.start));
 }
