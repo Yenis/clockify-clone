@@ -105,6 +105,31 @@
         <p id="tags-empty" class="report-empty" hidden>No entries in this week.</p>
         <ol id="tag-totals" class="week-days tag-totals"></ol>
       </section>
+
+      <section class="report card" aria-labelledby="export-title">
+        <h3 id="export-title" class="report-title">Export to CSV</h3>
+        <p class="report-range">A file for Excel or Google Sheets, with the finished entries between two dates.</p>
+        <form id="export-form" class="export-form" novalidate>
+          <label>
+            From
+            <input name="from" data-field="from" type="date" class="edit-field">
+          </label>
+          <label>
+            To
+            <input name="to" data-field="to" type="date" class="edit-field">
+          </label>
+          <label class="export-separator">
+            For
+            <select name="separator" class="edit-field">
+              <option value=";">Excel with Bosnian or European settings (;)</option>
+              <option value=",">Google Sheets, or Excel with English settings (,)</option>
+            </select>
+          </label>
+          <button class="button button-primary" type="submit">Download CSV</button>
+          <p id="export-count" class="export-count"></p>
+          <p id="export-error" class="form-error" role="alert" hidden></p>
+        </form>
+      </section>
     </div>
   </main>
 

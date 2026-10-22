@@ -417,3 +417,28 @@ The heading of the week also says **Next week** now, for the week after this one
 - Leaving out entries without a tag. Then the tags wouldn't add up to the week total, which looks like a mistake.
 
 **Checked:** this week's "Bild-AI Workshop" total, 7:09:00, matches the entries by hand: 4:44 on Tuesday, 1:59 on Wednesday and 0:26 today. The tag totals together make the week total. Took the tag off one entry: it moved to "(no tag)", last. Next week: "No entries in this week." Checked on a phone-sized window: long tag names wrap and the totals stay aligned.
+
+---
+
+## Step 22: Export to CSV
+
+**Date:** 2026-10-22
+
+**What:** the Reports page has a third card, **Export to CSV**. You choose the first and last date (both included; it starts with this week), and which program the file is for. Under the form it says how many entries the file will have. **Download CSV** saves a file such as `time-entries-2026-10-19-to-2026-10-25.csv` in Downloads, with one line per entry, oldest first: date, start, end, duration, hours as a decimal number, description and tag.
+
+**Why:** a Silver item. A CSV file opens in Excel or Google Sheets, for an invoice, a timesheet or your own sums.
+
+**Decisions:**
+
+- **Two kinds of file.** Excel set up for Bosnian (or most European languages) expects a **semicolon** between values and a **decimal comma** (`1,50`); Google Sheets and Excel set up for English expect a **comma** and a decimal point (`1.50`). A file in the wrong kind opens with everything in one column, so you choose. The semicolon kind comes first: it is what Excel uses here.
+- **Only finished entries.** The running timer has no end yet.
+- **Hours as a decimal number** as well as `h:mm:ss`, because that is what you multiply by an hourly rate.
+- **An invisible mark at the start of the file** (a "byte order mark") tells Excel the file is UTF-8, so č, ć, š, ž and đ show correctly.
+- **Text that starts with `=`, `+`, `-` or `@` gets an apostrophe in front.** Excel would otherwise treat a description like `=SUM(A1)` as a formula and run it.
+
+**Decided against:**
+
+- An Excel file (`.xlsx`). It needs a library, and CSV opens everywhere.
+- Exporting the week shown above automatically. A range of dates is what the Silver item asks for, and it can be a month or a single day.
+
+**Checked:** exported 15–20 October in both kinds and read the files back: 14 entries, oldest first, the right columns, the decimal comma in the semicolon kind and the decimal point in the comma kind, and the UTF-8 mark at the start. A description with quotes and `=` at the start, and a tag with "Č", came out correctly. A last date before the first date: a message, and no file. Checked the card on a phone-sized window.

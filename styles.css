@@ -260,6 +260,36 @@ select {
   color: var(--muted);
 }
 
+/* The export */
+
+.export-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 14px;
+  margin-top: 16px;
+}
+
+.export-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.export-form .export-separator {
+  flex: 1;
+  min-width: 240px;
+}
+
+.export-count {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 /* Days still to come: no bar yet, and a lighter name */
 .week-day.future .week-day-name,
 .week-day.future .week-day-total {
@@ -803,6 +833,15 @@ select {
 
   .tag-totals .week-day {
     grid-template-columns: 110px 1fr 72px;
+  }
+
+  .export-form label {
+    flex: 1 1 40%;
+  }
+
+  .export-form .export-separator,
+  .export-form .button {
+    flex-basis: 100%;
   }
 }
 

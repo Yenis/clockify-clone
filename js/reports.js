@@ -1,4 +1,5 @@
-// The Reports page: the total for each day of a week, for the whole week, and for each tag.
+// The Reports page: the total for each day of a week, for the whole week, and for each tag,
+// and the export to a CSV file.
 // Uses `entries` and `runningSince` from app.js.
 
 const weekTitle = document.getElementById('week-title');
@@ -11,6 +12,9 @@ const thisWeekButton = document.getElementById('this-week');
 const tagsRange = document.getElementById('tags-range');
 const tagsEmpty = document.getElementById('tags-empty');
 const tagTotals = document.getElementById('tag-totals');
+const exportForm = document.getElementById('export-form');
+const exportCount = document.getElementById('export-count');
+const exportError = document.getElementById('export-error');
 
 // The Monday of the week shown. The report opens on this week.
 let shownWeek = startOfWeek(new Date());
@@ -63,6 +67,7 @@ function renderReports() {
 
   renderTagTotals(entriesBetween(shownWeek, weekEnd));
   tagsRange.textContent = `${weekTitle.textContent}, ${weekRange.textContent}`;
+  updateExportCount();
 }
 
 // The total for each tag in the week shown, the biggest first, and entries without a tag last.
@@ -124,6 +129,119 @@ function barLine(label, total, longest) {
   item.append(name, track, value);
   return item;
 }
+
+// The export: the finished entries from one date to another, both included, oldest first.
+// The running timer isn't in it: it has no end yet.
+
+// The dates in the export form as [from, to), or a problem to show.
+function exportRange() {
+  const fields = exportForm.elements;
+  const from = fromDateAndTimeFields(fields.from.value, '00:00');
+  const to = fromDateAndTimeFields(fields.to.value, '00:00');
+  if (!fields.from.value) return { problem: { field: 'from', message: 'Please choose the first date.' } };
+  if (!fields.to.value) return { problem: { field: 'to', message: 'Please choose the last date.' } };
+  if (!from || !to) return { problem: { field: 'from', message: 'This date is not a real one. Please check it.' } };
+  if (to < from) return { problem: { field: 'to', message: 'The last date must be on or after the first date.' } };
+  return { from, to: addDays(to, 1) };
+}
+
+function exportEntries(from, to) {
+  return entries
+    .filter((entry) => {
+      const start = new Date(entry.start);
+      return start >= from && start < to;
+    })
+    .sort((a, b) => a.start.localeCompare(b.start));
+}
+
+function updateExportCount() {
+  const range = exportRange();
+  if (range.problem) {
+    exportCount.textContent = '';
+    return;
+  }
+  const count = exportEntries(range.from, range.to).length;
+  exportCount.textContent = count === 1 ? '1 entry' : `${count} entries`;
+}
+
+// One value in a CSV file. Text goes in quotes, with quotes inside it doubled.
+// Text that starts with = + - or @ gets an apostrophe in front, so that Excel shows it
+// as text instead of running it as a formula.
+function csvValue(value) {
+  let text = String(value);
+  if (/^[=+\-@]/.test(text)) text = `'${text}`;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+// The whole CSV file. With ";" between values, Excel with European settings also
+// expects a decimal comma, so the hours are written as 1,25 instead of 1.25.
+function buildCsv(exported, separator) {
+  const decimal = separator === ';' ? ',' : '.';
+  const header = ['Date', 'Start', 'End', 'Duration', 'Hours', 'Description', 'Tag'];
+  const lines = [header.map(csvValue).join(separator)];
+  for (const entry of exported) {
+    const start = new Date(entry.start);
+    const end = new Date(entry.end);
+    const hours = ((end - start) / 3600000).toFixed(2).replace('.', decimal);
+    lines.push([
+      csvValue(formatDate(start)),
+      csvValue(formatTime(start)),
+      csvValue(formatTime(end)),
+      csvValue(formatDuration(end - start)),
+      csvValue(hours),
+      csvValue(entry.description),
+      csvValue(entry.tag),
+    ].join(separator));
+  }
+  // The invisible mark at the start tells Excel the file is UTF-8, so č, ć, š, ž and đ show correctly.
+  return `\uFEFF${lines.join('\r\n')}\r\n`;
+}
+
+// Hands a file to the browser, which saves it in Downloads.
+function downloadFile(name, text, type) {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = name;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function exportCsv() {
+  const range = exportRange();
+  if (range.problem) {
+    markProblemField(exportForm, range.problem);
+    exportError.textContent = range.problem.message;
+    exportError.hidden = false;
+    return;
+  }
+  const exported = exportEntries(range.from, range.to);
+  if (exported.length === 0) {
+    exportError.textContent = 'There are no finished entries between these dates.';
+    exportError.hidden = false;
+    return;
+  }
+  const fields = exportForm.elements;
+  const name = `time-entries-${fields.from.value}-to-${fields.to.value}.csv`;
+  downloadFile(name, buildCsv(exported, fields.separator.value), 'text/csv;charset=utf-8');
+}
+
+exportForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  exportCsv();
+});
+
+exportForm.addEventListener('input', () => {
+  unmarkProblemFields(exportForm);
+  exportError.hidden = true;
+  updateExportCount();
+});
+
+// The export starts with this week.
+exportForm.elements.from.value = toDateFieldValue(shownWeek);
+exportForm.elements.to.value = toDateFieldValue(addDays(shownWeek, 6));
 
 previousWeekButton.addEventListener('click', () => {
   shownWeek = addDays(shownWeek, -7);
