@@ -236,3 +236,19 @@ The messages say exactly what to fix:
 **Checked:** in the form, left each field empty in turn: each time the right message, the right field marked, and the cursor in it. Typing in the form made the message go away. An end before the start: message, nothing added. Then the same while editing: the message appeared under the row and went away when I fixed the time. No pop-ups anywhere.
 
 **Gold is done.**
+
+---
+
+## Step 13: Update the plan for the new tiers
+
+**Date:** 2026-10-22
+
+**What:** `PLAN.md` now follows the tiers from the GitHub assignment: old Silver and Gold together are the new **Bronze**, old Gold is **Silver**, and old Platinum is **Gold**. It lists the new requirements and steps 13 to 27, and two new decisions: how the app looks, and that weeks start on Monday.
+
+**Why:** the app already has everything in the new Bronze. The plan should say what comes next before we build it.
+
+**Decided against:**
+
+- Starting a new plan file. The old steps are the history of how Bronze was built, so they stay, and the new steps continue the numbering.
+
+**Checked:** read the new requirements against section 6 of the GitHub assignment: every feature is in the plan.

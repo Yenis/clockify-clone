@@ -10,18 +10,28 @@ One person, working on their own laptop.
 
 ## Requirements
 
+The tiers moved up in the GitHub assignment: everything that was Silver or Gold is now **Bronze**, Gold is now **Silver**, and Platinum is now **Gold**.
+
+**Bronze** (all built in steps 1–12)
+
+- Start and stop a timer, with a description. Only one timer runs at a time, and it shows the time passing.
+- A list of entries, newest first, with description, start, end and duration. An entry without a description shows "(no description)".
+- Today's total.
+- Entries are still there after you close and reopen the app, and a running timer keeps running.
+- Edit an entry's description, start and end. The app refuses an end time before the start time.
+- Delete an entry, after a confirmation question.
+
 **Silver**
 
-- Start and stop a timer, with a description of what you are working on.
-- A list of your entries, each with its start time, end time and duration.
-- Today's total.
-- Entries are still there after you close and reopen the app.
+- Add an entry by hand (built in step 11).
+- Tags, and the total time per tag.
+- This week: the total for each day and for the week.
+- Export entries for a range of dates to a CSV file.
+- The privacy policy and terms of service inside the app.
 
 **Gold**
 
-- Add an entry by hand, for when you forgot to start the timer.
-- Edit an entry.
-- Delete an entry.
+- The app on an Android phone, installed from an APK file.
 
 ## Decisions
 
@@ -32,6 +42,8 @@ One person, working on their own laptop.
 | How to run it | Open `index.html` in Chrome or Firefox | The simplest possible way to run an app. |
 | Language of the interface | English | Same as the course materials. |
 | Time format | 24-hour clock, durations as `h:mm:ss` | What people in Bosnia and Herzegovina are used to. |
+| How it looks | Green, calm and plain: a dark green bar at the top, white cards on a pale green background, the Rubik font kept inside the app | Readable, and it looks the same without internet, which the phone app needs. |
+| Weeks | Start on Monday | As in Bosnia and Herzegovina. |
 
 **What this means:** the app runs on this laptop, in this browser. The data lives in that browser and nowhere else.
 
@@ -79,6 +91,23 @@ One step, one commit. Each step is small enough to describe in one sentence, che
 | 10 | Edit an entry | Click Edit, change the description and the end time, save: the row and the total update |
 | 11 | Add an entry by hand | Fill in description, date, start and end, click Add: the entry appears in the right place |
 | 12 | Clear messages when the input is wrong | Try an end time before the start time: the app says what is wrong and saves nothing |
+| | **Bronze is done** (the tiers moved up) | |
+| 13 | Update the plan for the new tiers | This file lists the new tiers and steps |
+| 14 | `.gitignore` | Secrets, installed packages and generated files are listed, and `git status` doesn't show them |
+| 15 | Keep the font inside the app | Turn the internet off and reload: the text is still in Rubik |
+| 16 | The green look | Header, timer, form and list look like one app, also on a phone-sized window |
+| 17 | Entries grouped by day, with a total for each day | Entries from two days show under two headings, each with its own total |
+| 18 | Tags | Give an entry a tag when you start, add or edit it: the tag shows next to the description |
+| 19 | Two pages: Timer and Reports | The links at the top switch between them, and the page stays after reloading |
+| 20 | This week: a total for each day and for the week | Compare two days with the list; the arrows move a week back and forward |
+| 21 | Total per tag | Tag three entries and add their times up yourself |
+| 22 | Export to CSV | Export a range of dates and open the file in Excel or Google Sheets |
+| 23 | Privacy policy and terms of service | `privacy-policy.md` and `terms-of-service.md` exist |
+| 24 | Both documents inside the app | Open each from a link at the bottom of the app |
+| | **Silver is done** | |
+| 25 | Plan the phone app | This file has the answers to the two questions from the assignment |
+| 26 | An Android app around the web app | `android/build-apk.sh` makes an APK file |
+| 27 | Export works on the phone | Export a CSV on the phone: it lands in Downloads |
 | | **Gold is done** | |
 
 ## Rules for working
