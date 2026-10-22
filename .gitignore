@@ -1,0 +1,16 @@
+# Files git must never track. This repository is public on GitHub,
+# and a push sends every committed file in every commit.
+
+# Secrets: passwords and API keys. The app has none today; this line
+# keeps one out if it ever gets one.
+.env
+
+# Installed packages: reinstalled in a minute, thousands of files.
+node_modules/
+
+# Generated files: made again from the app's files on every build.
+dist/
+build/
+
+# Claude Code's local settings for this folder, on this laptop only.
+.claude/settings.local.json

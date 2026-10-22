@@ -252,3 +252,15 @@ The messages say exactly what to fix:
 - Starting a new plan file. The old steps are the history of how Bronze was built, so they stay, and the new steps continue the numbering.
 
 **Checked:** read the new requirements against section 6 of the GitHub assignment: every feature is in the plan.
+
+---
+
+## Step 14: `.gitignore`
+
+**Date:** 2026-10-22
+
+**What:** added `.gitignore`, which lists files git must never track: secrets (`.env`), installed packages (`node_modules/`), generated files (`dist/`, `build/`), and Claude Code's local settings for this folder.
+
+**Why:** the repository will be public on GitHub, and a push sends every committed file in every commit. `.gitignore` only protects files that were never committed, so it goes in before the first push.
+
+**Checked:** `git ls-files` lists only the app's own files and the two documents: no secrets, packages or generated files were ever committed. `git status` shows `.gitignore` as the only new file.
