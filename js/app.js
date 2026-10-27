@@ -117,6 +117,25 @@ function updateTodayTotal() {
   // Today's heading in the list shows the same total.
   const todayHeadingTotal = entriesBody.querySelector('[data-today-total]');
   if (todayHeadingTotal) todayHeadingTotal.textContent = formatDuration(total);
+  updateGoal(total);
+}
+
+// How much time a day should add up to: 8 hours.
+const DAILY_GOAL = 8 * 60 * 60 * 1000;
+
+// Fills the bar under today's entries, and says how much is still to go.
+function updateGoal(total) {
+  const goal = entriesBody.querySelector('.goal-row');
+  if (!goal) return;
+
+  const reached = total >= DAILY_GOAL;
+  const percent = Math.min(100, (total / DAILY_GOAL) * 100);
+  goal.classList.toggle('reached', reached);
+  goal.querySelector('.goal-bar').style.width = `${percent}%`;
+  goal.querySelector('.goal-track').setAttribute('aria-valuenow', Math.floor(percent));
+  goal.querySelector('.goal-left').textContent = reached
+    ? 'Goal reached'
+    : `${formatDuration(DAILY_GOAL - total)} to go`;
 }
 
 function updateTimerBar() {
@@ -135,16 +154,20 @@ const COLUMNS = 4;
 function renderEntries() {
   const newestFirst = [...entries].sort((a, b) => b.start.localeCompare(a.start));
 
+  // The daily goal goes right after the last of today's entries.
+  const today = toDateFieldValue(new Date());
   const rows = [];
   let day = null;
   for (const entry of newestFirst) {
     const entryDay = toDateFieldValue(new Date(entry.start));
     if (entryDay !== day) {
+      if (day === today) rows.push(goalRow());
       day = entryDay;
       rows.push(dayRow(new Date(entry.start), newestFirst));
     }
     rows.push(entryRow(entry));
   }
+  if (day === today) rows.push(goalRow());
 
   entriesBody.replaceChildren(...rows);
   updateTagOptions();
@@ -179,6 +202,41 @@ function dayRow(date, allEntries) {
 
   const row = document.createElement('tr');
   row.className = 'day-row';
+  row.append(td);
+  return row;
+}
+
+// The daily goal under today's entries: its name, a bar, and the time still to go.
+// The bar is filled by updateGoal, every second while the timer runs.
+function goalRow() {
+  const name = document.createElement('span');
+  name.className = 'goal-name';
+  name.textContent = `Daily goal: ${DAILY_GOAL / (60 * 60 * 1000)} hours`;
+
+  const bar = document.createElement('span');
+  bar.className = 'goal-bar';
+
+  const track = document.createElement('span');
+  track.className = 'goal-track';
+  track.setAttribute('role', 'progressbar');
+  track.setAttribute('aria-label', 'Daily goal');
+  track.setAttribute('aria-valuemin', '0');
+  track.setAttribute('aria-valuemax', '100');
+  track.append(bar);
+
+  const left = document.createElement('span');
+  left.className = 'goal-left';
+
+  const goal = document.createElement('div');
+  goal.className = 'goal';
+  goal.append(name, track, left);
+
+  const td = cell('');
+  td.colSpan = COLUMNS;
+  td.append(goal);
+
+  const row = document.createElement('tr');
+  row.className = 'goal-row';
   row.append(td);
   return row;
 }

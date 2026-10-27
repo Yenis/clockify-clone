@@ -634,6 +634,49 @@ select {
   font-variant-numeric: tabular-nums;
 }
 
+/* The daily goal under today's entries: name, bar, time still to go */
+
+.goal {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.goal-name {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.goal-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  overflow: hidden;
+}
+
+.goal-bar {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--primary);
+  transition: width 0.3s;
+}
+
+.goal-left {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.goal-row.reached .goal-left {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
 .entries-table td.description {
   width: 60%;
   font-weight: 500;
@@ -843,13 +886,19 @@ select {
   .entries-table tr.entry-row .actions { grid-area: actions; }
 
   .entries-table tr.day-row,
+  .entries-table tr.goal-row,
   .entries-table tr.editing {
     display: block;
   }
 
   .entries-table tr.day-row td,
+  .entries-table tr.goal-row td,
   .entries-table tr.editing td {
     display: block;
+  }
+
+  .goal {
+    gap: 10px;
   }
 
   .edit-label {
